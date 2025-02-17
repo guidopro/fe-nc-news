@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
 
 import "./App.css";
+import SingleArticle from "./components/SingleArticle";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -15,7 +16,8 @@ function App() {
       <Header />
       <NavBar setLoggedIn={setLoggedIn} />
       <Routes>
-        <Route path="/" element={<ArticleList />}></Route>
+        <Route index element={<ArticleList />}></Route>
+        <Route path="/articles/:article_id" element={<SingleArticle />}></Route>
       </Routes>
     </>
   );

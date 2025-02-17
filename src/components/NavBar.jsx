@@ -1,13 +1,13 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
   const [users, setUsers] = useState([]);
 
   return (
     <nav>
-      <a href="/">Home</a> |
+      <Link to="/">Home</Link>
       <label>
-        {" "}
         User:
         <select name="cars" id="cars">
           <option value="user1">user1</option>
