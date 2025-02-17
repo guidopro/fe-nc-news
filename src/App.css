@@ -16,3 +16,13 @@ h1 {
 .card-group {
   display: grid;
 }
+
+.loading {
+  margin: 3rem;
+}
+
+#single-article-container {
+  border: solid 1px black;
+  padding: 1rem;
+  background-color: rgba(184, 135, 11, 0.241);
+}

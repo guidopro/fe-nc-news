@@ -17,15 +17,16 @@ export default function ArticleList() {
   }, []);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p className="loading">Loading...</p>;
   }
 
   const cards = articles.map((article) => {
+    const url = `/articles/${article.article_id}`;
     return (
       <Card key={article.article_id} className="cards">
         <Card.Img variant="top" src={article.article_img_url} />
         <Card.Body>
-          <Link to="/articles/:article_id">
+          <Link to={url}>
             <Card.Title>{article.title}</Card.Title>
           </Link>
           <Card.Text></Card.Text>
