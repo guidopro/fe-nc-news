@@ -15,3 +15,9 @@ export const getArticles = () => {
     return data.articles;
   });
 };
+
+export const getArticleById = (article_id) => {
+  return apiClient.get(`/articles/${article_id}`).then(({ data }) => {
+    return data.article;
+  });
+};
