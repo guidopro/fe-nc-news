@@ -26,3 +26,13 @@ h1 {
   padding: 1rem;
   background-color: rgba(184, 135, 11, 0.241);
 }
+
+#navbar {
+  border: solid 1px black;
+  background-color: rgba(25, 25, 112, 0.314);
+}
+
+#user-dropdown {
+  background-color: rgba(255, 255, 255, 0.903);
+  color: black;
+}

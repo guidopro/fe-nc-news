@@ -1,20 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getUsers } from "../api-requests";
 
 export default function NavBar() {
   const [users, setUsers] = useState([]);
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    getUsers().then((users) => {
+      setUsers(users);
+    });
+  }, []);
+
+  function handleLogin(e) {
+    setUser(e.target.value);
+  }
+
+  const mappedUsers = users.map((user) => {
+    return (
+      <option key={user.username} value={user.username}>
+        {user.username}
+      </option>
+    );
+  });
 
   return (
-    <nav>
-      <Link to="/">Home</Link>
-      <label>
-        User:
-        <select name="cars" id="cars">
-          <option value="user1">user1</option>
-          <option value="user2">user2</option>
-          <option value="user3">user3</option>
-        </select>{" "}
-      </label>
+    <nav id="navbar">
+      <Link to="/">Home</Link>|
+      <form action="">
+        <label>
+          Users:
+          <select
+            name="users"
+            id="user-dropdown"
+            defaultValue={""}
+            onChange={(e) => {
+              handleLogin(e);
+            }}
+          >
+            <option value="" selected disabled>
+              select user
+            </option>
+            {mappedUsers}
+          </select>
+        </label>
+        <button type="submit">Log in</button>
+        {user && <p>Logged in as: {user}</p>}
+      </form>
     </nav>
   );
 }
