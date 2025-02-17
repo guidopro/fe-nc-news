@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Routes, Route } from "react-router-dom";
+
 import Header from "./components/Header";
 import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
@@ -12,7 +14,9 @@ function App() {
     <>
       <Header />
       <NavBar setLoggedIn={setLoggedIn} />
-      <ArticleList />
+      <Routes>
+        <Route path="/" element={<ArticleList />}></Route>
+      </Routes>
     </>
   );
 }
