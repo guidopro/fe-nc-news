@@ -13,7 +13,7 @@ export default function SingleArticle() {
       setArticle(article);
       setIsLoading(false);
     });
-  }, []);
+  }, [article_id]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
@@ -29,7 +29,9 @@ export default function SingleArticle() {
           Written by {article.author} on {article.created_at}
         </p>
         <p>{article.body}</p>
-        <button>👍 {article.votes}</button>
+        <button id="article like-button">👍 </button>
+        <button id="article unlike-button">👎</button>
+        <p>{article.votes}</p>
       </div>
       <Comments article_id={article_id} />
     </>
@@ -38,11 +40,10 @@ export default function SingleArticle() {
 
 function Comments({ article_id }) {
   const [comments, setComments] = useState([]);
+  const [like, setLike] = useState();
 
   useEffect(() => {
     getComments(article_id).then((comments) => {
-      console.log(comments);
-
       setComments(comments);
     });
   }, []);
@@ -57,7 +58,9 @@ function Comments({ article_id }) {
           {comment.author} {comment.created_at}
         </p>
         <p>{comment.body}</p>
-        <button id="like-button">👍 {comment.votes}</button>
+        <button id="like-button">👍 </button>
+        <button id="unlike-button">👎</button>
+        <p> {comment.votes}</p>
       </div>
     );
   });
