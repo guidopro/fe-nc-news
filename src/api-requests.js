@@ -35,3 +35,9 @@ export const voteOnArticle = (article_id, vote) => {
       return data.updatedArticle;
     });
 };
+
+export const postComment = (article_id) => {
+  return apiClient.post(`/articles/${article_id}/comments`).then(({ data }) => {
+    console.log(data);
+  });
+};

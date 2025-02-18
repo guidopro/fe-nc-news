@@ -12,6 +12,7 @@ export default function SingleArticle() {
   const [hasVoted, setHasVoted] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getArticleById(article_id).then((article) => {
       setArticle(article);
       setIsLoading(false);
@@ -36,7 +37,7 @@ export default function SingleArticle() {
   return (
     <>
       <div id="single-article-container">
-        <img src={article.article_img_url} alt="" width="200px" />
+        <img src={article.article_img_url} alt="" />
         <h2>{article.title}</h2>
         <p>{article.topic}</p>
         <p>
@@ -52,6 +53,7 @@ export default function SingleArticle() {
         <p>{article.votes + likes}</p>
         {error && <ErrorComponent message={error.message} />}
       </div>
+      <PostComment />
       <Comments article_id={article_id} />
     </>
   );
@@ -95,3 +97,12 @@ const ErrorComponent = ({ message }) => {
     </div>
   );
 };
+
+function PostComment() {
+  return (
+    <form action="">
+      <input type="text" />
+      <button type="submit">✉️</button>
+    </form>
+  );
+}
