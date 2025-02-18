@@ -27,3 +27,11 @@ export const getComments = (article_id) => {
     return data.comments;
   });
 };
+
+export const voteOnArticle = (article_id, vote) => {
+  return apiClient
+    .patch(`/articles/${article_id}/`, { inc_votes: 1 })
+    .then(({ data }) => {
+      console.log(data);
+    });
+};

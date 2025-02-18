@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { getArticleById, getComments } from "../api-requests";
+import { getArticleById, getComments, voteOnArticle } from "../api-requests";
 import { useEffect, useState } from "react";
 
 export default function SingleArticle() {
@@ -7,6 +7,7 @@ export default function SingleArticle() {
 
   const [article, setArticle] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [likes, setLikes] = useState(0);
 
   useEffect(() => {
     getArticleById(article_id).then((article) => {
@@ -19,6 +20,10 @@ export default function SingleArticle() {
     return <p className="loading">Loading...</p>;
   }
 
+  function handleLike(e) {
+    voteOnArticle(article_id);
+  }
+
   return (
     <>
       <div id="single-article-container">
@@ -29,9 +34,11 @@ export default function SingleArticle() {
           Written by {article.author} on {article.created_at}
         </p>
         <p>{article.body}</p>
-        <button id="article like-button">👍 </button>
+        <button id="article like-button" onClick={() => handleLike()}>
+          👍
+        </button>
         <button id="article unlike-button">👎</button>
-        <p>{article.votes}</p>
+        <p>{article.votes + likes}</p>
       </div>
       <Comments article_id={article_id} />
     </>
