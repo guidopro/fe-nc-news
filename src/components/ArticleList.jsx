@@ -1,6 +1,6 @@
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
-import "bootstrap/dist/css/bootstrap.min.css";
+
 import { getArticles } from "../api-requests";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
