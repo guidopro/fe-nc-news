@@ -100,9 +100,13 @@ const ErrorComponent = ({ message }) => {
 
 function PostComment() {
   return (
-    <form action="">
-      <input type="text" />
-      <button type="submit">✉️</button>
-    </form>
+    <div className="post">
+      <h3>Post a Comment</h3>
+      <form>
+        <label htmlFor="comment-input">Comment:</label>
+        <textarea type="text" id="comment-input" required />
+        <button type="submit">Post Comment</button>
+      </form>
+    </div>
   );
 }

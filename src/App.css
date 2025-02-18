@@ -40,3 +40,25 @@ h1 {
   background-color: rgba(255, 255, 255, 0.903);
   color: black;
 }
+
+.post {
+  /* border: solid 1px black; */
+}
+
+.post label {
+  text-align: left;
+  display: block;
+}
+
+.post h3 {
+  color: blue;
+  margin-bottom: 10px;
+}
+
+.post textarea {
+  width: 100%;
+  display: block;
+  padding: 6px 10px;
+  margin: 10px 0;
+  box-sizing: border-box;
+}
