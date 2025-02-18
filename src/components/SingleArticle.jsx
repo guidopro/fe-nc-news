@@ -1,5 +1,10 @@
 import { useParams } from "react-router-dom";
-import { getArticleById, getComments, voteOnArticle } from "../api-requests";
+import {
+  getArticleById,
+  getComments,
+  postComment,
+  voteOnArticle,
+} from "../api-requests";
 import { useEffect, useState } from "react";
 
 export default function SingleArticle() {
@@ -53,7 +58,7 @@ export default function SingleArticle() {
         <p>{article.votes + likes}</p>
         {error && <ErrorComponent message={error.message} />}
       </div>
-      <PostComment />
+      <PostComment article_id={article_id} />
       <Comments article_id={article_id} />
     </>
   );
@@ -98,13 +103,34 @@ const ErrorComponent = ({ message }) => {
   );
 };
 
-function PostComment() {
+function PostComment({ article_id }) {
+  const [body, setBody] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    // hardcodes existing user for now
+    const comment = { body, username: "tickle122" };
+
+    postComment(article_id, comment).then((res) => {
+      console.log(res);
+    });
+  }
+
   return (
     <div className="post">
       <h3>Post a Comment</h3>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="comment-input">Comment:</label>
-        <textarea type="text" id="comment-input" required />
+        <textarea
+          type="text"
+          value={body}
+          onChange={(e) => {
+            setBody(e.target.value);
+          }}
+          id="comment-input"
+          required
+        />
         <button type="submit">Post Comment</button>
       </form>
     </div>

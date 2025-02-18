@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiClient = axios.create({
   baseURL: "https://guys-app.onrender.com/api",
-  timeout: 1000,
+  // timeout: 1000,
 });
 
 export const getUsers = () => {
@@ -36,8 +36,10 @@ export const voteOnArticle = (article_id, vote) => {
     });
 };
 
-export const postComment = (article_id) => {
-  return apiClient.post(`/articles/${article_id}/comments`).then(({ data }) => {
-    console.log(data);
-  });
+export const postComment = (article_id, comment) => {
+  return apiClient
+    .post(`/articles/${article_id}/comments`, comment)
+    .then(({ data }) => {
+      return data.postedComment;
+    });
 };
