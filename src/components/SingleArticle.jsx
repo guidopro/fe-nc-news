@@ -1,5 +1,10 @@
 import { useParams } from "react-router-dom";
-import { getArticleById, getComments, voteOnArticle } from "../api-requests";
+import {
+  getArticleById,
+  getComments,
+  postComment,
+  voteOnArticle,
+} from "../api-requests";
 import { useEffect, useState } from "react";
 
 export default function SingleArticle() {
@@ -12,6 +17,7 @@ export default function SingleArticle() {
   const [hasVoted, setHasVoted] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     getArticleById(article_id).then((article) => {
       setArticle(article);
       setIsLoading(false);
@@ -36,7 +42,7 @@ export default function SingleArticle() {
   return (
     <>
       <div id="single-article-container">
-        <img src={article.article_img_url} alt="" width="200px" />
+        <img src={article.article_img_url} alt="" />
         <h2>{article.title}</h2>
         <p>{article.topic}</p>
         <p>
@@ -59,13 +65,13 @@ export default function SingleArticle() {
 
 function Comments({ article_id }) {
   const [comments, setComments] = useState([]);
-  const [like, setLike] = useState();
+  const [posted, setPosted] = useState(false);
 
   useEffect(() => {
     getComments(article_id).then((comments) => {
       setComments(comments);
     });
-  }, []);
+  }, [posted]);
 
   const mappedComments = comments.map((comment) => {
     return (
@@ -84,7 +90,60 @@ function Comments({ article_id }) {
     );
   });
 
-  return <div className="comments-container">{mappedComments}</div>;
+  return (
+    <>
+      <PostComment article_id={article_id} setPosted={setPosted} />
+      <div className="comments-container">{mappedComments}</div>
+    </>
+  );
+}
+
+function PostComment({ article_id, setPosted }) {
+  const [body, setBody] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    // hardcodes existing user for now
+    const comment = { body, username: "tickle122" };
+    setIsLoading(true);
+    postComment(article_id, comment)
+      .then(() => {
+        setPosted(true);
+        setBody("");
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+      });
+  }
+
+  return (
+    <div className="post">
+      <h3>Post a Comment</h3>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="comment-input">Comment:</label>
+        <textarea
+          type="text"
+          value={body}
+          onChange={(e) => {
+            setBody(e.target.value);
+          }}
+          id="comment-input"
+          required
+        />
+        {!isLoading && <button type="submit">Post comment</button>}
+        {isLoading && (
+          <button disabled style={{ backgroundColor: "grey" }}>
+            Posting comment...
+          </button>
+        )}
+      </form>
+      {error && <ErrorComponent message={error.message} />}
+    </div>
+  );
 }
 
 const ErrorComponent = ({ message }) => {

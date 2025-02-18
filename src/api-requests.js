@@ -2,7 +2,7 @@ import axios from "axios";
 
 const apiClient = axios.create({
   baseURL: "https://guys-app.onrender.com/api",
-  timeout: 1000,
+  // timeout: 1000,
 });
 
 export const getUsers = () => {
@@ -33,5 +33,13 @@ export const voteOnArticle = (article_id, vote) => {
     .patch(`/articles/${article_id}/`, { inc_votes: vote })
     .then(({ data }) => {
       return data.updatedArticle;
+    });
+};
+
+export const postComment = (article_id, comment) => {
+  return apiClient
+    .post(`/articles/${article_id}/comments`, comment)
+    .then(({ data }) => {
+      return data.postedComment;
     });
 };
