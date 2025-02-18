@@ -33,12 +33,12 @@ export default function NavBar() {
           <select
             name="users"
             id="user-dropdown"
-            defaultValue={""}
+            defaultValue="none"
             onChange={(e) => {
               handleLogin(e);
             }}
           >
-            <option value="" selected disabled>
+            <option value="none" disabled>
               select user
             </option>
             {mappedUsers}
