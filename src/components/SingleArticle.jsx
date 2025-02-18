@@ -58,7 +58,6 @@ export default function SingleArticle() {
         <p>{article.votes + likes}</p>
         {error && <ErrorComponent message={error.message} />}
       </div>
-      <PostComment article_id={article_id} />
       <Comments article_id={article_id} />
     </>
   );
@@ -66,13 +65,13 @@ export default function SingleArticle() {
 
 function Comments({ article_id }) {
   const [comments, setComments] = useState([]);
-  const [like, setLike] = useState();
+  const [posted, setPosted] = useState(false);
 
   useEffect(() => {
     getComments(article_id).then((comments) => {
       setComments(comments);
     });
-  }, []);
+  }, [posted]);
 
   const mappedComments = comments.map((comment) => {
     return (
@@ -91,30 +90,34 @@ function Comments({ article_id }) {
     );
   });
 
-  return <div className="comments-container">{mappedComments}</div>;
+  return (
+    <>
+      <PostComment article_id={article_id} setPosted={setPosted} />
+      <div className="comments-container">{mappedComments}</div>
+    </>
+  );
 }
 
-const ErrorComponent = ({ message }) => {
-  return (
-    <div>
-      <h1>Error</h1>
-      <p>{message}</p>
-    </div>
-  );
-};
-
-function PostComment({ article_id }) {
+function PostComment({ article_id, setPosted }) {
   const [body, setBody] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
 
     // hardcodes existing user for now
     const comment = { body, username: "tickle122" };
-
-    postComment(article_id, comment).then((res) => {
-      console.log(res);
-    });
+    setIsLoading(true);
+    postComment(article_id, comment)
+      .then(() => {
+        setPosted(true);
+        setBody("");
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err);
+      });
   }
 
   return (
@@ -131,8 +134,23 @@ function PostComment({ article_id }) {
           id="comment-input"
           required
         />
-        <button type="submit">Post Comment</button>
+        {!isLoading && <button type="submit">Post comment</button>}
+        {isLoading && (
+          <button disabled style={{ backgroundColor: "grey" }}>
+            Posting comment...
+          </button>
+        )}
       </form>
+      {error && <ErrorComponent message={error.message} />}
     </div>
   );
 }
+
+const ErrorComponent = ({ message }) => {
+  return (
+    <div>
+      <h1>Error</h1>
+      <p>{message}</p>
+    </div>
+  );
+};
