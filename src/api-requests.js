@@ -30,8 +30,8 @@ export const getComments = (article_id) => {
 
 export const voteOnArticle = (article_id, vote) => {
   return apiClient
-    .patch(`/articles/${article_id}/`, { inc_votes: 1 })
+    .patch(`/articles/${article_id}/`, { inc_votes: vote })
     .then(({ data }) => {
-      console.log(data);
+      return data.updatedArticle;
     });
 };

@@ -7,21 +7,30 @@ export default function SingleArticle() {
 
   const [article, setArticle] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [likes, setLikes] = useState(0);
+  const [hasVoted, setHasVoted] = useState(false);
 
   useEffect(() => {
     getArticleById(article_id).then((article) => {
       setArticle(article);
       setIsLoading(false);
     });
-  }, [article_id]);
+  }, [article_id, likes]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
   }
 
-  function handleLike(e) {
-    voteOnArticle(article_id);
+  function handleLike(vote) {
+    if (hasVoted) {
+      return;
+    }
+    voteOnArticle(article_id, vote).catch((err) => {
+      setError(err);
+    });
+    setLikes((currentCount) => currentCount + vote);
+    setHasVoted(true);
   }
 
   return (
@@ -34,11 +43,14 @@ export default function SingleArticle() {
           Written by {article.author} on {article.created_at}
         </p>
         <p>{article.body}</p>
-        <button id="article like-button" onClick={() => handleLike()}>
+        <button id="article like-button" onClick={() => handleLike(1)}>
           👍
         </button>
-        <button id="article unlike-button">👎</button>
+        <button id="article unlike-button" onClick={() => handleLike(-1)}>
+          👎
+        </button>
         <p>{article.votes + likes}</p>
+        {error && <ErrorComponent message={error.message} />}
       </div>
       <Comments article_id={article_id} />
     </>
@@ -74,3 +86,12 @@ function Comments({ article_id }) {
 
   return <div className="comments-container">{mappedComments}</div>;
 }
+
+const ErrorComponent = ({ message }) => {
+  return (
+    <div>
+      <h1>Error</h1>
+      <p>{message}</p>
+    </div>
+  );
+};
