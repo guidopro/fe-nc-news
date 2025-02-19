@@ -82,8 +82,6 @@ function Comments({ article_id }) {
   function handleDelete(e) {
     setIsLoading(true);
     setDeletingButton(e.target.value);
-    // console.log(e.target.value, typeof e.target.value, "e.target.value");
-    console.log(deletingButton);
 
     const newComments = comments.filter(
       (comment) => comment.comment_id !== Number(e.target.value)
@@ -113,28 +111,11 @@ function Comments({ article_id }) {
             Delete
           </button>
         )}
-        {deletingButton === comment.comment_id ? (
-          <button
-            id="deleting..."
-            // value={comment.comment_id}
-            disabled
-            style={{ backgroundColor: "grey" }}
-          >
+        {isLoading && deletingButton === comment.comment_id && (
+          <button id="deleting..." disabled style={{ backgroundColor: "grey" }}>
             Deleting...
           </button>
-        ) : (
-          <p>false</p>
         )}
-        {/* {isLoading && (
-          <button
-            id="deleting..."
-            // value={comment.comment_id}
-            disabled
-            style={{ backgroundColor: "grey" }}
-          >
-            Deleting...
-          </button>
-        )} */}
         <p> {comment.votes}</p>
       </div>
     );
