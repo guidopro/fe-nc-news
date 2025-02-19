@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, createContext } from "react";
 import { Routes, Route } from "react-router-dom";
+
+// styling
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -9,17 +11,24 @@ import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
 
-function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+export const UserContext = createContext();
 
+function App() {
+  const [user, setUser] = useState("grumpy19");
   return (
     <>
-      <Header />
-      <NavBar setLoggedIn={setLoggedIn} />
-      <Routes>
-        <Route index element={<ArticleList />}></Route>
-        <Route path="/articles/:article_id" element={<SingleArticle />}></Route>
-      </Routes>
+      <UserContext.Provider value={user}>
+        <Header />
+        <NavBar />
+        <Routes>
+          <Route index element={<ArticleList />}></Route>
+          <Route
+            path="/articles/:article_id"
+            element={<SingleArticle />}
+          ></Route>
+        </Routes>
+      </UserContext.Provider>
+      ;
     </>
   );
 }

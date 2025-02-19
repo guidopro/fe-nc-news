@@ -1,11 +1,13 @@
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
+  deleteComment,
   getArticleById,
   getComments,
   postComment,
   voteOnArticle,
 } from "../api-requests";
-import { useEffect, useState } from "react";
+import { UserContext } from "../App";
 
 export default function SingleArticle() {
   const { article_id } = useParams();
@@ -66,12 +68,40 @@ export default function SingleArticle() {
 function Comments({ article_id }) {
   const [comments, setComments] = useState([]);
   const [posted, setPosted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [singleButtonId, setSingleButtonId] = useState("");
+
+  // brings user in from app level for use in comment delete
+  const user = useContext(UserContext);
 
   useEffect(() => {
     getComments(article_id).then((comments) => {
       setComments(comments);
     });
   }, [posted]);
+
+  function handleDelete(e) {
+    setIsLoading(true);
+    // console.log(e.target.value, typeof e.target.value, "e.target.value");
+
+    setSingleButtonId(e.target.value);
+
+    const newComments = comments.filter(
+      (comment) => comment.comment_id !== Number(e.target.value)
+    );
+
+    deleteComment(e.target.value).then(() => {
+      setComments(newComments);
+      // setSingleButtonId("");
+      setIsLoading(false);
+    });
+  }
+
+  // console.log(
+  //   singleButtonId,
+  //   typeof singleButtonId,
+  //   "single button id after set"
+  // );
 
   const mappedComments = comments.map((comment) => {
     return (
@@ -85,6 +115,21 @@ function Comments({ article_id }) {
         <p>{comment.body}</p>
         <button id="like-button">👍 </button>
         <button id="unlike-button">👎</button>
+        {!isLoading && (
+          <button value={comment.comment_id} onClick={(e) => handleDelete(e)}>
+            Delete
+          </button>
+        )}
+        {isLoading && (
+          <button
+            id="deleting..."
+            value={comment.comment_id}
+            disabled
+            style={{ backgroundColor: "grey" }}
+          >
+            Deleting...
+          </button>
+        )}
         <p> {comment.votes}</p>
       </div>
     );
