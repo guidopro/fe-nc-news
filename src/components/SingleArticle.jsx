@@ -1,11 +1,13 @@
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import {
+  deleteComment,
   getArticleById,
   getComments,
   postComment,
   voteOnArticle,
 } from "../api-requests";
-import { useEffect, useState } from "react";
+import { UserContext } from "../App";
 
 export default function SingleArticle() {
   const { article_id } = useParams();
@@ -65,13 +67,32 @@ export default function SingleArticle() {
 
 function Comments({ article_id }) {
   const [comments, setComments] = useState([]);
-  const [posted, setPosted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [deletingButton, setDeletingButton] = useState("");
+
+  // brings user in from app level for use in comment delete
+  const user = useContext(UserContext);
 
   useEffect(() => {
     getComments(article_id).then((comments) => {
       setComments(comments);
     });
-  }, [posted]);
+  }, [comments]);
+
+  function handleDelete(e) {
+    setIsLoading(true);
+    setDeletingButton(e.target.value);
+
+    const newComments = comments.filter(
+      (comment) => comment.comment_id !== Number(e.target.value)
+    );
+
+    deleteComment(e.target.value).then(() => {
+      setComments(newComments);
+      setDeletingButton("");
+      setIsLoading(false);
+    });
+  }
 
   const mappedComments = comments.map((comment) => {
     return (
@@ -85,6 +106,16 @@ function Comments({ article_id }) {
         <p>{comment.body}</p>
         <button id="like-button">👍 </button>
         <button id="unlike-button">👎</button>
+        {!isLoading && user === comment.author && (
+          <button value={comment.comment_id} onClick={(e) => handleDelete(e)}>
+            Delete
+          </button>
+        )}
+        {isLoading && deletingButton === comment.comment_id && (
+          <button id="deleting..." disabled style={{ backgroundColor: "grey" }}>
+            Deleting...
+          </button>
+        )}
         <p> {comment.votes}</p>
       </div>
     );
@@ -92,13 +123,13 @@ function Comments({ article_id }) {
 
   return (
     <>
-      <PostComment article_id={article_id} setPosted={setPosted} />
+      <PostComment article_id={article_id} setComments={setComments} />
       <div className="comments-container">{mappedComments}</div>
     </>
   );
 }
 
-function PostComment({ article_id, setPosted }) {
+function PostComment({ article_id, setComments }) {
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -110,8 +141,10 @@ function PostComment({ article_id, setPosted }) {
     const comment = { body, username: "tickle122" };
     setIsLoading(true);
     postComment(article_id, comment)
-      .then(() => {
-        setPosted(true);
+      .then((postedComm) => {
+        setComments((currComms) => {
+          return [...currComms, postedComm];
+        });
         setBody("");
         setIsLoading(false);
       })
