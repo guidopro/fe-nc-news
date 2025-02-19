@@ -14,7 +14,7 @@ import SingleArticle from "./components/SingleArticle";
 export const UserContext = createContext();
 
 function App() {
-  const [user, setUser] = useState("grumpy19");
+  const [user, setUser] = useState("tickle122");
   return (
     <>
       <UserContext.Provider value={user}>

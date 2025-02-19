@@ -67,9 +67,8 @@ export default function SingleArticle() {
 
 function Comments({ article_id }) {
   const [comments, setComments] = useState([]);
-  const [posted, setPosted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [singleButtonId, setSingleButtonId] = useState("");
+  const [deletingButton, setDeletingButton] = useState("");
 
   // brings user in from app level for use in comment delete
   const user = useContext(UserContext);
@@ -78,13 +77,13 @@ function Comments({ article_id }) {
     getComments(article_id).then((comments) => {
       setComments(comments);
     });
-  }, [posted]);
+  }, [comments]);
 
   function handleDelete(e) {
     setIsLoading(true);
+    setDeletingButton(e.target.value);
     // console.log(e.target.value, typeof e.target.value, "e.target.value");
-
-    setSingleButtonId(e.target.value);
+    console.log(deletingButton);
 
     const newComments = comments.filter(
       (comment) => comment.comment_id !== Number(e.target.value)
@@ -92,16 +91,10 @@ function Comments({ article_id }) {
 
     deleteComment(e.target.value).then(() => {
       setComments(newComments);
-      // setSingleButtonId("");
+      setDeletingButton("");
       setIsLoading(false);
     });
   }
-
-  // console.log(
-  //   singleButtonId,
-  //   typeof singleButtonId,
-  //   "single button id after set"
-  // );
 
   const mappedComments = comments.map((comment) => {
     return (
@@ -120,16 +113,28 @@ function Comments({ article_id }) {
             Delete
           </button>
         )}
-        {isLoading && (
+        {deletingButton === comment.comment_id ? (
           <button
             id="deleting..."
-            value={comment.comment_id}
+            // value={comment.comment_id}
             disabled
             style={{ backgroundColor: "grey" }}
           >
             Deleting...
           </button>
+        ) : (
+          <p>false</p>
         )}
+        {/* {isLoading && (
+          <button
+            id="deleting..."
+            // value={comment.comment_id}
+            disabled
+            style={{ backgroundColor: "grey" }}
+          >
+            Deleting...
+          </button>
+        )} */}
         <p> {comment.votes}</p>
       </div>
     );
@@ -137,13 +142,13 @@ function Comments({ article_id }) {
 
   return (
     <>
-      <PostComment article_id={article_id} setPosted={setPosted} />
+      <PostComment article_id={article_id} setComments={setComments} />
       <div className="comments-container">{mappedComments}</div>
     </>
   );
 }
 
-function PostComment({ article_id, setPosted }) {
+function PostComment({ article_id, setComments }) {
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -155,8 +160,10 @@ function PostComment({ article_id, setPosted }) {
     const comment = { body, username: "tickle122" };
     setIsLoading(true);
     postComment(article_id, comment)
-      .then(() => {
-        setPosted(true);
+      .then((postedComm) => {
+        setComments((currComms) => {
+          return [...currComms, postedComm];
+        });
         setBody("");
         setIsLoading(false);
       })
