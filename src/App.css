@@ -69,3 +69,9 @@ h1 {
   padding: 7px;
   cursor: pointer;
 }
+
+#card-group {
+  display: block;
+  /* flex-wrap: wrap; */
+  /* background-color: blue; */
+}
