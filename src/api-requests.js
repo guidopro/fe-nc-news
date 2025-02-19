@@ -10,8 +10,8 @@ export const getUsers = () => {
     return data.users;
   });
 };
-export const getArticles = () => {
-  return apiClient.get("/articles").then(({ data }) => {
+export const getArticles = (topic) => {
+  return apiClient.get("/articles", { params: { topic } }).then(({ data }) => {
     return data.articles;
   });
 };
