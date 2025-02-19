@@ -43,7 +43,7 @@ export default function ArticleList() {
   });
   return (
     <>
-      <TopicSelect />
+      <TopicSelect setSelectTopic={setSelectTopic} />
       <CardGroup id="card-group">{cards}</CardGroup>
     </>
   );

@@ -1,4 +1,3 @@
-// import { useState, createContext } from "react";
 import { Routes, Route } from "react-router-dom";
 
 // styling
@@ -11,11 +10,7 @@ import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
 
-// export const UserContext = createContext();
-
 function App() {
-  // hardcoded user
-  // const [user, setUser] = useState("tickle122");
   return (
     <>
       <Header />
@@ -23,7 +18,7 @@ function App() {
       <Routes>
         <Route index element={<ArticleList />} />
         <Route path="/articles" element={<ArticleList />} />
-        {/* <Route path="/articles/:topic" element={<ArticleList />} /> */}
+        <Route path="/:topic" element={<ArticleList />} />
         <Route path="/articles/:article_id" element={<SingleArticle />} />
       </Routes>
       ;
