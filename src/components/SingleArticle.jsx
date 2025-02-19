@@ -115,7 +115,7 @@ function Comments({ article_id }) {
         <p>{comment.body}</p>
         <button id="like-button">👍 </button>
         <button id="unlike-button">👎</button>
-        {!isLoading && (
+        {!isLoading && user === comment.author && (
           <button value={comment.comment_id} onClick={(e) => handleDelete(e)}>
             Delete
           </button>
