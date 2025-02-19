@@ -10,6 +10,7 @@ import Header from "./components/Header";
 import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
+import TopicSelect from "./components/TopicSelect";
 
 export const UserContext = createContext();
 
@@ -21,7 +22,15 @@ function App() {
         <Header />
         <NavBar />
         <Routes>
-          <Route index element={<ArticleList />}></Route>
+          <Route
+            index
+            element={
+              <>
+                <TopicSelect />
+                <ArticleList />
+              </>
+            }
+          ></Route>
           <Route
             path="/articles/:article_id"
             element={<SingleArticle />}
