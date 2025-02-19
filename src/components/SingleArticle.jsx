@@ -7,7 +7,7 @@ import {
   postComment,
   voteOnArticle,
 } from "../api-requests";
-import { UserContext } from "../App";
+import { UserContext } from "../contexts/User";
 
 export default function SingleArticle() {
   const { article_id } = useParams();
@@ -71,7 +71,7 @@ function Comments({ article_id }) {
   const [deletingButton, setDeletingButton] = useState("");
 
   // brings user in from app level for use in comment delete
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     getComments(article_id).then((comments) => {
