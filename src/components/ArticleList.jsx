@@ -3,18 +3,22 @@ import CardGroup from "react-bootstrap/CardGroup";
 
 import { getArticles } from "../api-requests";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import TopicSelect from "./TopicSelect";
 
 export default function ArticleList() {
+  const { topic } = useParams();
+
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { selectTopic, setSelectTopic } = useState("");
 
   useEffect(() => {
-    getArticles().then((articles) => {
+    getArticles(topic).then((articles) => {
       setArticles(articles);
       setIsLoading(false);
     });
-  }, []);
+  }, [selectTopic]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
@@ -37,5 +41,10 @@ export default function ArticleList() {
       </Card>
     );
   });
-  return <CardGroup id="card-group">{cards}</CardGroup>;
+  return (
+    <>
+      <TopicSelect />
+      <CardGroup id="card-group">{cards}</CardGroup>
+    </>
+  );
 }
