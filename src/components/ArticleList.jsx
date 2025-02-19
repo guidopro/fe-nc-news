@@ -5,6 +5,7 @@ import { getArticles } from "../api-requests";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import TopicSelect from "./TopicSelect";
+import SortQueries from "./SortQueries";
 
 export default function ArticleList() {
   const { topic } = useParams();
@@ -44,6 +45,7 @@ export default function ArticleList() {
   return (
     <>
       <TopicSelect setSelectTopic={setSelectTopic} />
+      <SortQueries />
       <CardGroup id="card-group">{cards}</CardGroup>
     </>
   );
