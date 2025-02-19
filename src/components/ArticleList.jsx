@@ -12,14 +12,15 @@ export default function ArticleList() {
 
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { selectTopic, setSelectTopic } = useState("");
+  const [selectTopic, setSelectTopic] = useState("");
+  const [query, setQuery] = useState(undefined);
 
   useEffect(() => {
-    getArticles(topic).then((articles) => {
+    getArticles(topic, query).then((articles) => {
       setArticles(articles);
       setIsLoading(false);
     });
-  }, [selectTopic]);
+  }, [selectTopic, query]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
@@ -45,7 +46,7 @@ export default function ArticleList() {
   return (
     <>
       <TopicSelect setSelectTopic={setSelectTopic} />
-      <SortQueries />
+      <SortQueries setQuery={setQuery} />
       <CardGroup id="card-group">{cards}</CardGroup>
     </>
   );

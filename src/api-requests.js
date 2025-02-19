@@ -10,10 +10,12 @@ export const getUsers = () => {
     return data.users;
   });
 };
-export const getArticles = (topic) => {
-  return apiClient.get("/articles", { params: { topic } }).then(({ data }) => {
-    return data.articles;
-  });
+export const getArticles = (topic, sort_by) => {
+  return apiClient
+    .get("/articles", { params: { topic, sort_by } })
+    .then(({ data }) => {
+      return data.articles;
+    });
 };
 
 export const getArticleById = (article_id) => {

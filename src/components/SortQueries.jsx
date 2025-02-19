@@ -1,12 +1,16 @@
-export default function SortQueries() {
+export default function SortQueries({ setQuery }) {
   return (
     <div>
-      <label htmlFor="sort-by">Sort by:</label>
-      <select id="sort-by" defaultValue="newest">
-        <option value="newest">By newest</option>
-        <option value="oldest">By oldest</option>
-        <option>By votes</option>
-        <option>By comment count</option>
+      <label htmlFor="sort_by">Sort by:</label>
+      <select
+        id="sort_by"
+        defaultValue="created_at"
+        onChange={(e) => setQuery(e.target.value)}
+      >
+        <option value="created_at">Newest</option>
+        <option value="created_at&order=asc">Oldest</option>
+        <option value="votes">Votes</option>
+        <option value="comment_count">Comment count</option>
       </select>
     </div>
   );
