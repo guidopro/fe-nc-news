@@ -72,7 +72,7 @@ export default function ArticleList() {
   return (
     <>
       <TopicSelect />
-      <SortQueries queryHandler={queryHandler} />
+      <SortQueries queryHandler={queryHandler} query={query} />
       <CardGroup id="card-group">{cards}</CardGroup>
     </>
   );

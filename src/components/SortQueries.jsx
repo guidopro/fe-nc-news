@@ -1,10 +1,10 @@
-export default function SortQueries({ queryHandler }) {
+export default function SortQueries({ queryHandler, query }) {
   return (
     <div>
       <label htmlFor="sort_by">Sort by:</label>
       <select
         id="sort_by"
-        defaultValue="created_at"
+        defaultValue={query}
         onChange={(e) => queryHandler(e)}
       >
         <option value="created_at">Newest</option>
