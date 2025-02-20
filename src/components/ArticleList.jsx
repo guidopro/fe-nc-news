@@ -11,12 +11,11 @@ import CardGroup from "react-bootstrap/CardGroup";
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectTopic, setSelectTopic] = useState("");
   const [query, setQuery] = useState("created_at");
   const [order, setOrder] = useState("desc");
 
   const params = useParams();
-  console.log(params);
+  const topic = params.topic;
 
   function queryHandler(e) {
     if (e.target.value === "created_at asc") {
@@ -32,11 +31,11 @@ export default function ArticleList() {
 
   useEffect(() => {
     setIsLoading(true);
-    getArticles(selectTopic, query, order).then((articles) => {
+    getArticles(topic, query, order).then((articles) => {
       setArticles(articles);
       setIsLoading(false);
     });
-  }, [selectTopic, query, order]);
+  }, [topic, query, order]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
@@ -61,7 +60,7 @@ export default function ArticleList() {
   });
   return (
     <>
-      <TopicSelect setSelectTopic={setSelectTopic} />
+      <TopicSelect />
       <SortQueries queryHandler={queryHandler} />
       <CardGroup id="card-group">{cards}</CardGroup>
     </>

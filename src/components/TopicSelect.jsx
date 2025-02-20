@@ -5,41 +5,10 @@ export default function TopicSelect({ setSelectTopic }) {
     <nav>
       <h2>Select topic</h2>
       <div className="links">
-        <Link
-          to="/articles"
-          onClick={() => {
-            setSelectTopic("");
-          }}
-        >
-          All topics
-        </Link>{" "}
-        |{" "}
-        <Link
-          to="/articles?topic=coding"
-          onClick={() => {
-            setSelectTopic("coding");
-          }}
-        >
-          Coding
-        </Link>{" "}
-        |{" "}
-        <Link
-          to="/articles?topic=football"
-          onClick={() => {
-            setSelectTopic("football");
-          }}
-        >
-          Football
-        </Link>{" "}
-        |{" "}
-        <Link
-          to="/articles?topic=cooking"
-          onClick={() => {
-            setSelectTopic("cooking");
-          }}
-        >
-          Cooking
-        </Link>
+        <Link to="/articles">All topics</Link> |{" "}
+        <Link to="/topics/coding">Coding</Link> |{" "}
+        <Link to="/topics/football">Football</Link> |{" "}
+        <Link to="/topics/cooking">Cooking</Link>
       </div>
     </nav>
   );

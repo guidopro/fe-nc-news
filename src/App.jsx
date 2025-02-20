@@ -10,6 +10,7 @@ import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
 import NotFound from "./components/error_handlers/NotFound";
+import ArticleListTest from "./components/ArticleList test";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route index element={<ArticleList />} />
         <Route path="/articles" element={<ArticleList />} />
         <Route path="/articles/:article_id" element={<SingleArticle />} />
+        <Route path="/topics/:topic" element={<ArticleList />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
       ;
