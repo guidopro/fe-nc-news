@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-export default function TopicSelect({ setSelectTopic }) {
+export default function TopicSelect({}) {
   return (
     <nav>
       <h2>Select topic</h2>

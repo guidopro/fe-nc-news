@@ -5,7 +5,9 @@ export default function ArticleNotFound() {
     <div className="not-found">
       <h2>Sorry</h2>
       <p>This article cannnot be found</p>
-      <Link to="/">Return to homepage</Link>
+      <Link to="/" reloadDocument>
+        Return to homepage
+      </Link>
     </div>
   );
 }

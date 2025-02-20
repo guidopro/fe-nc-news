@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import { UserContext } from "../contexts/User";
 import {
   deleteComment,
   getArticleById,
@@ -7,8 +8,9 @@ import {
   postComment,
   voteOnArticle,
 } from "../api-requests";
-import { UserContext } from "../contexts/User";
+
 import ArticleNotFound from "./error_handlers/ArticleNotFound";
+import ErrorComponent from "./error_handlers/ErrorComponent";
 
 export default function SingleArticle() {
   const { article_id } = useParams();
@@ -28,6 +30,8 @@ export default function SingleArticle() {
       })
       .catch((error) => {
         setIsError(error);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   }, [article_id, likes]);
@@ -186,12 +190,3 @@ function PostComment({ article_id, setComments }) {
     </div>
   );
 }
-
-const ErrorComponent = ({ message }) => {
-  return (
-    <div>
-      <h1>Error</h1>
-      <p>{message}</p>
-    </div>
-  );
-};

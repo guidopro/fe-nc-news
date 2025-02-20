@@ -7,10 +7,12 @@ import TopicSelect from "./TopicSelect";
 import SortQueries from "./SortQueries";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
+import TopicNotFound from "./error_handlers/TopicNotFound";
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(null);
   const [query, setQuery] = useState("created_at");
   const [order, setOrder] = useState("desc");
 
@@ -31,14 +33,23 @@ export default function ArticleList() {
 
   useEffect(() => {
     setIsLoading(true);
-    getArticles(topic, query, order).then((articles) => {
-      setArticles(articles);
-      setIsLoading(false);
-    });
+    getArticles(topic, query, order)
+      .then((articles) => {
+        setArticles(articles);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [topic, query, order]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
+  } else if (isError) {
+    return <TopicNotFound />;
   }
 
   const cards = articles.map((article) => {

@@ -10,7 +10,6 @@ import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
 import NotFound from "./components/error_handlers/NotFound";
-import ArticleListTest from "./components/ArticleList test";
 
 function App() {
   return (
