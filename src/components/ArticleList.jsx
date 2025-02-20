@@ -1,6 +1,6 @@
 import { getArticles } from "../api-requests";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // components
 import TopicSelect from "./TopicSelect";
@@ -14,6 +14,9 @@ export default function ArticleList() {
   const [selectTopic, setSelectTopic] = useState("");
   const [query, setQuery] = useState("created_at");
   const [order, setOrder] = useState("desc");
+
+  const params = useParams();
+  console.log(params);
 
   function queryHandler(e) {
     if (e.target.value === "created_at asc") {

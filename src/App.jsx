@@ -9,7 +9,7 @@ import Header from "./components/Header";
 import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
-import NotFound from "./components/NotFound";
+import NotFound from "./components/error_handlers/NotFound";
 
 function App() {
   return (

@@ -8,26 +8,34 @@ import {
   voteOnArticle,
 } from "../api-requests";
 import { UserContext } from "../contexts/User";
+import ArticleNotFound from "./error_handlers/ArticleNotFound";
 
 export default function SingleArticle() {
   const { article_id } = useParams();
 
   const [article, setArticle] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [isError, setIsError] = useState(null);
   const [likes, setLikes] = useState(0);
   const [hasVoted, setHasVoted] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
-    getArticleById(article_id).then((article) => {
-      setArticle(article);
-      setIsLoading(false);
-    });
+    getArticleById(article_id)
+      .then((article) => {
+        setArticle(article);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsError(error);
+        setIsLoading(false);
+      });
   }, [article_id, likes]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
+  } else if (isError) {
+    return <ArticleNotFound />;
   }
 
   function handleLike(vote) {
@@ -35,7 +43,7 @@ export default function SingleArticle() {
       return;
     }
     voteOnArticle(article_id, vote).catch((err) => {
-      setError(err);
+      setIsError(err);
     });
     setLikes((currentCount) => currentCount + vote);
     setHasVoted(true);
@@ -58,7 +66,7 @@ export default function SingleArticle() {
           👎
         </button>
         <p>{article.votes + likes}</p>
-        {error && <ErrorComponent message={error.message} />}
+        {isError && <ErrorComponent message={error.message} />}
       </div>
       <Comments article_id={article_id} />
     </>
@@ -132,7 +140,7 @@ function Comments({ article_id }) {
 function PostComment({ article_id, setComments }) {
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [isError, setIsError] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -149,7 +157,7 @@ function PostComment({ article_id, setComments }) {
         setIsLoading(false);
       })
       .catch((err) => {
-        setError(err);
+        setIsError(err);
       });
   }
 
@@ -174,7 +182,7 @@ function PostComment({ article_id, setComments }) {
           </button>
         )}
       </form>
-      {error && <ErrorComponent message={error.message} />}
+      {isError && <ErrorComponent message={error.message} />}
     </div>
   );
 }
