@@ -26,7 +26,10 @@ export default function NavBar() {
 
   return (
     <nav id="navbar">
-      <Link to="/">Home</Link>|
+      <Link reloadDocument to="/">
+        Home
+      </Link>
+      |
       <form action="">
         <label>
           Users:

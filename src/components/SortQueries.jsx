@@ -8,9 +8,9 @@ export default function SortQueries({ queryHandler }) {
         onChange={(e) => queryHandler(e)}
       >
         <option value="created_at">Newest</option>
-        <option value="created_at">Oldest</option>
-        <option value="votes">Votes</option>
-        <option value="comment_count">Comment count</option>
+        <option value="created_at asc">Oldest</option>
+        <option value="votes">Votes (most)</option>
+        <option value="comment_count">Comments (most)</option>
       </select>
     </div>
   );
