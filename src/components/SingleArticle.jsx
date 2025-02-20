@@ -141,6 +141,8 @@ function Comments({ article_id }) {
 }
 
 function PostComment({ article_id, setComments }) {
+  const { user } = useContext(UserContext);
+
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
@@ -148,8 +150,7 @@ function PostComment({ article_id, setComments }) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    // hardcodes existing user for now
-    const comment = { body, username: "tickle122" };
+    const comment = { body, username: user };
     setIsLoading(true);
     postComment(article_id, comment)
       .then((postedComm) => {
