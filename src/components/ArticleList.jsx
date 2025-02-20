@@ -3,20 +3,28 @@ import CardGroup from "react-bootstrap/CardGroup";
 
 import { getArticles } from "../api-requests";
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import TopicSelect from "./TopicSelect";
 import SortQueries from "./SortQueries";
 
 export default function ArticleList() {
-  const { topic } = useParams();
+  // const { topic } = useParams();
+  const [searchParam, setSearchParam] = useSearchParams();
 
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectTopic, setSelectTopic] = useState("");
-  const [query, setQuery] = useState(undefined);
+  const [query, setQuery] = useState("created_at");
+  const [order, setOrder] = useState("desc");
+
+  function queryHandler(e) {
+    setQuery(e.target.value);
+    console.log(e);
+    // setOrder("asc");
+  }
 
   useEffect(() => {
-    getArticles(topic, query).then((articles) => {
+    getArticles(selectTopic, query, order).then((articles) => {
       setArticles(articles);
       setIsLoading(false);
     });
@@ -46,7 +54,7 @@ export default function ArticleList() {
   return (
     <>
       <TopicSelect setSelectTopic={setSelectTopic} />
-      <SortQueries setQuery={setQuery} />
+      <SortQueries queryHandler={queryHandler} />
       <CardGroup id="card-group">{cards}</CardGroup>
     </>
   );

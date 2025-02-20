@@ -6,7 +6,7 @@ export default function TopicSelect({ setSelectTopic }) {
       <h2>Select topic</h2>
       <div className="links">
         <Link
-          to="/"
+          to="/articles"
           onClick={() => {
             setSelectTopic("");
           }}
@@ -15,7 +15,7 @@ export default function TopicSelect({ setSelectTopic }) {
         </Link>{" "}
         |{" "}
         <Link
-          to="/coding"
+          to="/articles?topic=coding"
           onClick={() => {
             setSelectTopic("coding");
           }}
@@ -24,7 +24,7 @@ export default function TopicSelect({ setSelectTopic }) {
         </Link>{" "}
         |{" "}
         <Link
-          to="/football"
+          to="/articles?topic=football"
           onClick={() => {
             setSelectTopic("football");
           }}
@@ -33,7 +33,7 @@ export default function TopicSelect({ setSelectTopic }) {
         </Link>{" "}
         |{" "}
         <Link
-          to="/cooking"
+          to="/articles?topic=cooking"
           onClick={() => {
             setSelectTopic("cooking");
           }}
