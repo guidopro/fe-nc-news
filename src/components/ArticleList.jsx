@@ -1,24 +1,39 @@
+import { getArticles } from "../api-requests";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
+// components
+import TopicSelect from "./TopicSelect";
+import SortQueries from "./SortQueries";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 
-import { getArticles } from "../api-requests";
-import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import TopicSelect from "./TopicSelect";
-
 export default function ArticleList() {
-  const { topic } = useParams();
-
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { selectTopic, setSelectTopic } = useState("");
+  const [selectTopic, setSelectTopic] = useState("");
+  const [query, setQuery] = useState("created_at");
+  const [order, setOrder] = useState("desc");
+
+  function queryHandler(e) {
+    if (e.target.value === "created_at asc") {
+      const splitQueries = e.target.value.split(" ");
+      setQuery(splitQueries[0]);
+      // changes order to asc
+      setOrder(splitQueries[1]);
+    } else {
+      setQuery(e.target.value);
+      setOrder("desc");
+    }
+  }
 
   useEffect(() => {
-    getArticles(topic).then((articles) => {
+    setIsLoading(true);
+    getArticles(selectTopic, query, order).then((articles) => {
       setArticles(articles);
       setIsLoading(false);
     });
-  }, [selectTopic]);
+  }, [selectTopic, query, order]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
@@ -43,7 +58,8 @@ export default function ArticleList() {
   });
   return (
     <>
-      <TopicSelect />
+      <TopicSelect setSelectTopic={setSelectTopic} />
+      <SortQueries queryHandler={queryHandler} />
       <CardGroup id="card-group">{cards}</CardGroup>
     </>
   );

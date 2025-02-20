@@ -1,41 +1,41 @@
 import { Link } from "react-router-dom";
 
-export default function TopicSelect({ selectTopic }) {
+export default function TopicSelect({ setSelectTopic }) {
   return (
     <nav>
       <h2>Select topic</h2>
       <div className="links">
         <Link
-          to="/articles/"
+          to="/articles"
           onClick={() => {
-            selectTopic("");
+            setSelectTopic("");
           }}
         >
           All topics
         </Link>{" "}
         |{" "}
         <Link
-          to="/articles/coding"
+          to="/articles?topic=coding"
           onClick={() => {
-            selectTopic("coding");
+            setSelectTopic("coding");
           }}
         >
           Coding
         </Link>{" "}
         |{" "}
         <Link
-          to="/articles/football"
+          to="/articles?topic=football"
           onClick={() => {
-            selectTopic("football");
+            setSelectTopic("football");
           }}
         >
           Football
         </Link>{" "}
         |{" "}
         <Link
-          to="/articles/cooking"
+          to="/articles?topic=cooking"
           onClick={() => {
-            selectTopic("cooking");
+            setSelectTopic("cooking");
           }}
         >
           Cooking
