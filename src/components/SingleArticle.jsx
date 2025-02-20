@@ -26,7 +26,6 @@ export default function SingleArticle() {
     getArticleById(article_id)
       .then((article) => {
         setArticle(article);
-        setIsLoading(false);
       })
       .catch((error) => {
         setIsError(error);
@@ -34,7 +33,7 @@ export default function SingleArticle() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [article_id, likes]);
+  }, []);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
@@ -89,7 +88,7 @@ function Comments({ article_id }) {
     getComments(article_id).then((comments) => {
       setComments(comments);
     });
-  }, [comments]);
+  }, [comments, user]);
 
   function handleDelete(e) {
     setIsLoading(true);

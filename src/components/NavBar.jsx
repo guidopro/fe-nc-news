@@ -1,10 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { getUsers } from "../api-requests";
+import { UserContext } from "../contexts/User";
 
 export default function NavBar() {
+  const { user, setUser } = useContext(UserContext);
+
   const [users, setUsers] = useState([]);
-  const [user, setUser] = useState("");
+  const [value, setValue] = useState("");
 
   useEffect(() => {
     getUsers().then((users) => {
@@ -13,7 +16,12 @@ export default function NavBar() {
   }, []);
 
   function handleLogin(e) {
-    setUser(e.target.value);
+    e.preventDefault();
+    setUser(value);
+  }
+
+  function handleChange(e) {
+    setValue(e.target.value);
   }
 
   const mappedUsers = users.map((user) => {
@@ -26,20 +34,18 @@ export default function NavBar() {
 
   return (
     <nav id="navbar">
-      <Link reloadDocument to="/">
+      <Link className="navbar-items" to="/">
         Home
       </Link>
       |
-      <form action="">
+      <form className="navbar-items" onSubmit={handleLogin}>
         <label>
           Users:
           <select
-            name="users"
+            value={value}
             id="user-dropdown"
-            defaultValue="none"
-            onChange={(e) => {
-              handleLogin(e);
-            }}
+            // defaultValue="none"
+            onChange={handleChange}
           >
             <option value="none" disabled>
               select user
