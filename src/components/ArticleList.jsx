@@ -1,19 +1,23 @@
 import { getArticles } from "../api-requests";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // components
 import TopicSelect from "./TopicSelect";
 import SortQueries from "./SortQueries";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
+import TopicNotFound from "./error_handlers/TopicNotFound";
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectTopic, setSelectTopic] = useState("");
+  const [isError, setIsError] = useState(null);
   const [query, setQuery] = useState("created_at");
   const [order, setOrder] = useState("desc");
+
+  const params = useParams();
+  const topic = params.topic;
 
   function queryHandler(e) {
     if (e.target.value === "created_at asc") {
@@ -29,14 +33,23 @@ export default function ArticleList() {
 
   useEffect(() => {
     setIsLoading(true);
-    getArticles(selectTopic, query, order).then((articles) => {
-      setArticles(articles);
-      setIsLoading(false);
-    });
-  }, [selectTopic, query, order]);
+    getArticles(topic, query, order)
+      .then((articles) => {
+        setArticles(articles);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [topic, query, order]);
 
   if (isLoading) {
     return <p className="loading">Loading...</p>;
+  } else if (isError) {
+    return <TopicNotFound />;
   }
 
   const cards = articles.map((article) => {
@@ -58,7 +71,7 @@ export default function ArticleList() {
   });
   return (
     <>
-      <TopicSelect setSelectTopic={setSelectTopic} />
+      <TopicSelect />
       <SortQueries queryHandler={queryHandler} />
       <CardGroup id="card-group">{cards}</CardGroup>
     </>
