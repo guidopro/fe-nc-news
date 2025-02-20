@@ -23,7 +23,6 @@ function App() {
         <Route path="/topics/:topic" element={<ArticleList />} />
         <Route path="/*" element={<NotFound />} />
       </Routes>
-      ;
     </>
   );
 }
