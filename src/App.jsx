@@ -9,6 +9,7 @@ import Header from "./components/Header";
 import NavBar from "./components/NavBar";
 import ArticleList from "./components/ArticleList";
 import SingleArticle from "./components/SingleArticle";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
@@ -18,8 +19,8 @@ function App() {
       <Routes>
         <Route index element={<ArticleList />} />
         <Route path="/articles" element={<ArticleList />} />
-        <Route path="/:topic" element={<ArticleList />} />
         <Route path="/articles/:article_id" element={<SingleArticle />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
       ;
     </>
