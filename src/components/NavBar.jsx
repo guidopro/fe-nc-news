@@ -8,6 +8,7 @@ export default function NavBar() {
 
   const [users, setUsers] = useState([]);
   const [value, setValue] = useState("");
+  const [avatar, setAvatar] = useState("");
 
   useEffect(() => {
     getUsers().then((users) => {
@@ -18,6 +19,13 @@ export default function NavBar() {
   function handleLogin(e) {
     e.preventDefault();
     setUser(value);
+    console.log(value, "value");
+    console.log(users, "users");
+    for (let ele of users) {
+      if (ele.username === value) {
+        setAvatar(ele.avatar_url);
+      }
+    }
   }
 
   function handleChange(e) {
@@ -26,6 +34,7 @@ export default function NavBar() {
 
   function handleLogout() {
     setUser(undefined);
+    setAvatar("");
   }
 
   const mappedUsers = users.map((user) => {
@@ -61,8 +70,7 @@ export default function NavBar() {
         {user && <button onClick={handleLogout}>Log out</button>}
         {user && <p>Logged in as: {user}</p>}
       </form>
+      {avatar && <img src={avatar}></img>}
     </nav>
   );
 }
-
-function UserSelectDropdown() {}
