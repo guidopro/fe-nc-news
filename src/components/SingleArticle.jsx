@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../contexts/User";
 import {
@@ -80,6 +80,7 @@ function Comments({ article_id }) {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [deletingButton, setDeletingButton] = useState("");
+  const [newPost, setNewPost] = useState(false);
 
   // brings user in from app level for use in comment delete
   const { user } = useContext(UserContext);
@@ -88,7 +89,7 @@ function Comments({ article_id }) {
     getComments(article_id).then((comments) => {
       setComments(comments);
     });
-  }, [comments, user]);
+  }, [deletingButton, user, newPost]);
 
   function handleDelete(e) {
     setIsLoading(true);
@@ -134,34 +135,54 @@ function Comments({ article_id }) {
 
   return (
     <>
-      <PostComment article_id={article_id} setComments={setComments} />
+      <PostComment
+        article_id={article_id}
+        setComments={setComments}
+        newPost={newPost}
+        setNewPost={setNewPost}
+      />
       <div className="comments-container">{mappedComments}</div>
     </>
   );
 }
 
-function PostComment({ article_id, setComments }) {
+function PostComment({ article_id, setComments, newPost, setNewPost }) {
   const { user } = useContext(UserContext);
 
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
 
+  useState(() => {
+    setIsError(null);
+  }, [user]);
+
+  console.log(user);
+
   function handleSubmit(e) {
     e.preventDefault();
+
+    // prevents non-users from posting
+    if (!user) {
+      setIsError({ message: "Please log in to post a comment, thank you!" });
+      return;
+    }
 
     const comment = { body, username: user };
     setIsLoading(true);
     postComment(article_id, comment)
       .then((postedComm) => {
-        setComments((currComms) => {
-          return [...currComms, postedComm];
-        });
+        setNewPost((newPost = newPost ? false : true));
+        // setComments((currComms) => {
+        //   return [...currComms, postedComm];
+        // });
         setBody("");
-        setIsLoading(false);
       })
       .catch((err) => {
         setIsError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -186,7 +207,7 @@ function PostComment({ article_id, setComments }) {
           </button>
         )}
       </form>
-      {isError && <ErrorComponent message={error.message} />}
+      {isError && <ErrorComponent message={isError.message} />}
     </div>
   );
 }
