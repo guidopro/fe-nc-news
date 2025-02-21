@@ -157,7 +157,7 @@ function PostComment({ article_id, setComments, newPost, setNewPost }) {
     setIsError(null);
   }, [user]);
 
-  console.log(user);
+  console.log(user, isError);
 
   function handleSubmit(e) {
     e.preventDefault();

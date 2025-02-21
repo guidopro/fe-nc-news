@@ -24,6 +24,10 @@ export default function NavBar() {
     setValue(e.target.value);
   }
 
+  function handleLogout() {
+    setUser(undefined);
+  }
+
   const mappedUsers = users.map((user) => {
     return (
       <option key={user.username} value={user.username}>
@@ -54,6 +58,7 @@ export default function NavBar() {
           </select>
         </label>
         <button type="submit">Log in</button>
+        {user && <button onClick={handleLogout}>Log out</button>}
         {user && <p>Logged in as: {user}</p>}
       </form>
     </nav>
