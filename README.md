@@ -2,7 +2,7 @@ Welcome!
 
 Link to site below:
 
-https://beamish-faun-6c30f3.netlify.app
+https://nc-news-guidopro.netlify.app
 
 This app is a front-end articles website where users can perform basic CRUD operations, such as voting, commenting, and deleting comments.
 
