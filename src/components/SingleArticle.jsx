@@ -63,12 +63,11 @@ export default function SingleArticle() {
         </p>
         <p>{article.body}</p>
         <button id="article like-button" onClick={() => handleLike(1)}>
-          👍
+          👍 {article.votes + likes}
         </button>
         <button id="article unlike-button" onClick={() => handleLike(-1)}>
           👎
         </button>
-        <p>{article.votes + likes}</p>
         {isError && <ErrorComponent message={error.message} />}
       </div>
       <Comments article_id={article_id} />
@@ -116,7 +115,7 @@ function Comments({ article_id }) {
           {comment.author} {comment.created_at}
         </p>
         <p>{comment.body}</p>
-        <button id="like-button">👍 </button>
+        <button id="like-button">👍 {comment.votes}</button>
         <button id="unlike-button">👎</button>
         {!isLoading && user === comment.author && (
           <button value={comment.comment_id} onClick={(e) => handleDelete(e)}>
@@ -128,7 +127,6 @@ function Comments({ article_id }) {
             Deleting...
           </button>
         )}
-        <p> {comment.votes}</p>
       </div>
     );
   });

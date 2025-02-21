@@ -76,9 +76,18 @@ export default function NavBar() {
         )}
         {!isLoggedIn && value && <button type="submit">Log in</button>}
         {user && isLoggedIn && <button onClick={handleLogout}>Log out</button>}
-        {user && isLoggedIn && <p>Logged in as: {user}</p>}
+        {user && isLoggedIn && (
+          <p className="navbar-items">Logged in as: {user}</p>
+        )}
       </form>
-      {avatar && <img id="avatar" src={avatar} alt="avatar"></img>}
+      {avatar && (
+        <img
+          id="avatar"
+          className="navbar-items"
+          src={avatar}
+          alt="avatar"
+        ></img>
+      )}
     </nav>
   );
 }
