@@ -46,7 +46,6 @@ export default function NavBar() {
       </option>
     );
   });
-  console.log(value);
 
   return (
     <nav id="navbar">
@@ -60,7 +59,6 @@ export default function NavBar() {
           <select
             value={value || "none"}
             id="user-dropdown"
-            defaultValue="none"
             onChange={handleChange}
           >
             <option value="none" disabled>

@@ -20,6 +20,8 @@ export default function SingleArticle() {
   const [isError, setIsError] = useState(null);
   const [likes, setLikes] = useState(0);
   const [hasVoted, setHasVoted] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisLiked] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -42,14 +44,27 @@ export default function SingleArticle() {
   }
 
   function handleLike(vote) {
-    if (hasVoted) {
+    if (isLiked) {
       return;
     }
     voteOnArticle(article_id, vote).catch((err) => {
       setIsError(err);
     });
     setLikes((currentCount) => currentCount + vote);
-    setHasVoted(true);
+    setIsLiked(true);
+    setIsDisLiked(false);
+  }
+
+  function handleDislike(vote) {
+    if (isDisliked) {
+      return;
+    }
+    voteOnArticle(article_id, vote).catch((err) => {
+      setIsError(err);
+    });
+    setLikes((currentCount) => currentCount + vote);
+    setIsDisLiked(true);
+    setIsLiked(false);
   }
 
   return (
@@ -65,7 +80,7 @@ export default function SingleArticle() {
         <button id="article like-button" onClick={() => handleLike(1)}>
           👍 {article.votes + likes}
         </button>
-        <button id="article unlike-button" onClick={() => handleLike(-1)}>
+        <button id="article unlike-button" onClick={() => handleDislike(-1)}>
           👎
         </button>
         {isError && <ErrorComponent message={error.message} />}
