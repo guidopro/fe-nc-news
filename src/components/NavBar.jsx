@@ -35,6 +35,7 @@ export default function NavBar() {
   function handleLogout() {
     setUser(undefined);
     setIsLoggedin(false);
+    setValue("");
     setAvatar("");
   }
 
@@ -45,6 +46,7 @@ export default function NavBar() {
       </option>
     );
   });
+  console.log(value);
 
   return (
     <nav id="navbar">
@@ -56,9 +58,9 @@ export default function NavBar() {
         <label>
           Users:
           <select
-            value={value}
+            value={value || "none"}
             id="user-dropdown"
-            // defaultValue="none"
+            defaultValue="none"
             onChange={handleChange}
           >
             <option value="none" disabled>
@@ -67,7 +69,12 @@ export default function NavBar() {
             {mappedUsers}
           </select>
         </label>
-        {!isLoggedIn && <button type="submit">Log in</button>}
+        {!isLoggedIn && !value && (
+          <button type="submit" disabled>
+            Log in
+          </button>
+        )}
+        {!isLoggedIn && value && <button type="submit">Log in</button>}
         {user && isLoggedIn && <button onClick={handleLogout}>Log out</button>}
         {user && isLoggedIn && <p>Logged in as: {user}</p>}
       </form>
