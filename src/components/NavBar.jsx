@@ -9,6 +9,7 @@ export default function NavBar() {
   const [users, setUsers] = useState([]);
   const [value, setValue] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [isLoggedIn, setIsLoggedin] = useState(false);
 
   useEffect(() => {
     getUsers().then((users) => {
@@ -19,6 +20,7 @@ export default function NavBar() {
   function handleLogin(e) {
     e.preventDefault();
     setUser(value);
+    setIsLoggedin(true);
     for (let ele of users) {
       if (ele.username === value) {
         setAvatar(ele.avatar_url);
@@ -32,6 +34,7 @@ export default function NavBar() {
 
   function handleLogout() {
     setUser(undefined);
+    setIsLoggedin(false);
     setAvatar("");
   }
 
@@ -64,9 +67,9 @@ export default function NavBar() {
             {mappedUsers}
           </select>
         </label>
-        <button type="submit">Log in</button>
-        {user && <button onClick={handleLogout}>Log out</button>}
-        {user && <p>Logged in as: {user}</p>}
+        {!isLoggedIn && <button type="submit">Log in</button>}
+        {user && isLoggedIn && <button onClick={handleLogout}>Log out</button>}
+        {user && isLoggedIn && <p>Logged in as: {user}</p>}
       </form>
       {avatar && <img id="avatar" src={avatar} alt="avatar"></img>}
     </nav>
