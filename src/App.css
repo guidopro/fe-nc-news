@@ -96,3 +96,10 @@ h1 {
   /* background-color: blue; */
 }
 
+#article-like-button {
+  background-color: rgb(255, 255, 255);
+}
+
+#article-like-button--clicked {
+  color: rgba(0, 0, 255, 0.366);
+}

@@ -46,6 +46,14 @@ export const postComment = (article_id, comment) => {
     });
 };
 
-export const deleteComment = (comment_id) => {
+export const deleteComment = (comment_id, vote) => {
   return apiClient.delete(`/comments/${comment_id}`);
+};
+
+export const voteOnComment = (comment_id, vote) => {
+  return apiClient
+    .patch(`/comments/${comment_id}`, { inc_votes: vote })
+    .then(({ data }) => {
+      return data.updatedComment;
+    });
 };

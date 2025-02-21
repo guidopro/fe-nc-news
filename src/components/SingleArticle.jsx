@@ -7,7 +7,11 @@ import {
   getComments,
   postComment,
   voteOnArticle,
+  voteOnComment,
 } from "../api-requests";
+
+import thumbsUp from "../assets/like.png";
+import thumbsDown from "../assets/dislike.png";
 
 import ArticleNotFound from "./error_handlers/ArticleNotFound";
 import ErrorComponent from "./error_handlers/ErrorComponent";
@@ -19,7 +23,6 @@ export default function SingleArticle() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(null);
   const [likes, setLikes] = useState(0);
-  const [hasVoted, setHasVoted] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisLiked] = useState(false);
 
@@ -77,11 +80,20 @@ export default function SingleArticle() {
           Written by {article.author} on {article.created_at}
         </p>
         <p>{article.body}</p>
-        <button id="article like-button" onClick={() => handleLike(1)}>
-          👍 {article.votes + likes}
+        <button
+          id={isLiked ? "article-like-button--clicked" : "article-like-button"}
+          onClick={() => handleLike(1)}
+        >
+          <img src={thumbsUp} style={{ height: "16px", width: "16px" }} />{" "}
+          {article.votes + likes}
         </button>
-        <button id="article unlike-button" onClick={() => handleDislike(-1)}>
-          👎
+        <button
+          id={
+            isDisliked ? "article-like-button--clicked" : "article-like-button"
+          }
+          onClick={() => handleDislike(-1)}
+        >
+          <img src={thumbsDown} />
         </button>
         {isError && <ErrorComponent message={error.message} />}
       </div>
@@ -95,6 +107,10 @@ function Comments({ article_id }) {
   const [isLoading, setIsLoading] = useState(false);
   const [deletingButton, setDeletingButton] = useState("");
   const [newPost, setNewPost] = useState(false);
+
+  const [likes, setLikes] = useState(0);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isDisliked, setIsDisLiked] = useState(false);
 
   // brings user in from app level for use in comment delete
   const { user } = useContext(UserContext);
@@ -120,6 +136,30 @@ function Comments({ article_id }) {
     });
   }
 
+  function handleLike(vote) {
+    if (isLiked) {
+      return;
+    }
+    voteOnComment(article_id, vote).catch((err) => {
+      setIsError(err);
+    });
+    setLikes((currentCount) => currentCount + vote);
+    setIsLiked(true);
+    setIsDisLiked(false);
+  }
+
+  function handleDislike(vote) {
+    if (isDisliked) {
+      return;
+    }
+    voteOnComment(article_id, vote).catch((err) => {
+      setIsError(err);
+    });
+    setLikes((currentCount) => currentCount + vote);
+    setIsDisLiked(true);
+    setIsLiked(false);
+  }
+
   const mappedComments = comments.map((comment) => {
     return (
       <div
@@ -130,8 +170,12 @@ function Comments({ article_id }) {
           {comment.author} {comment.created_at}
         </p>
         <p>{comment.body}</p>
-        <button id="like-button">👍 {comment.votes}</button>
-        <button id="unlike-button">👎</button>
+        <button id="like-button" onClick={() => handleLike(1)}>
+          <img src={thumbsUp} alt="thumbs-up" /> {comment.votes + likes}
+        </button>
+        <button id="unlike-button" onClick={() => handleDislike(1)}>
+          <img src={thumbsDown} alt="thumbs-down" />
+        </button>
         {!isLoading && user === comment.author && (
           <button value={comment.comment_id} onClick={(e) => handleDelete(e)}>
             Delete
