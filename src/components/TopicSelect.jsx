@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function TopicSelect({}) {
   return (
-    <nav>
+    <nav id="select-topic">
       <h2>Select topic</h2>
       <div className="links">
         <Link to="/articles">All topics</Link> |{" "}
