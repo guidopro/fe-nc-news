@@ -24,18 +24,6 @@ export default function ArticleList() {
   const params = useParams();
   const topic = params.topic;
 
-  function queryHandler(e) {
-    if (e.target.value === "created_at asc") {
-      const splitQueries = e.target.value.split(" ");
-      setQuery(splitQueries[0]);
-      // changes order to asc
-      setOrder(splitQueries[1]);
-    } else {
-      setQuery(e.target.value);
-      setOrder("desc");
-    }
-  }
-
   useEffect(() => {
     setIsLoading(true);
     getArticles(topic, query, order)
@@ -56,9 +44,15 @@ export default function ArticleList() {
     return <TopicNotFound />;
   }
 
+  function queryHandler(e) {
+    const splitQueries = e.target.value.split(" ");
+    setQuery(splitQueries[0]);
+    setOrder(splitQueries[1]);
+  }
+
   function GridExample() {
     return (
-      <Row xs={1} md={2} className="g-4">
+      <Row xs={1} md={2} lg={3} className="g-4">
         {Array.from(articles).map((article) => (
           <Col key={article.article_id}>
             <Card>
@@ -85,9 +79,8 @@ export default function ArticleList() {
   return (
     <>
       <TopicSelect />
-      <SortQueries queryHandler={queryHandler} query={query} />
+      <SortQueries queryHandler={queryHandler} query={query} order={order} />
       <GridExample />
     </>
   );
 }
-
