@@ -2,11 +2,16 @@ import { getArticles } from "../api-requests";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+// bootstrap
+
+import Card from "react-bootstrap/Card";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+
 // components
+
 import TopicSelect from "./TopicSelect";
 import SortQueries from "./SortQueries";
-import Card from "react-bootstrap/Card";
-import CardGroup from "react-bootstrap/CardGroup";
 import TopicNotFound from "./error_handlers/TopicNotFound";
 
 export default function ArticleList() {
@@ -51,28 +56,37 @@ export default function ArticleList() {
     return <TopicNotFound />;
   }
 
-  const cards = articles.map((article) => {
-    const url = `/articles/${article.article_id}`;
+  function GridExample() {
     return (
-      <Card key={article.article_id} className="cards">
-        <Card.Img variant="top" src={article.article_img_url} />
-        <Card.Body>
-          <Link to={url}>
-            <Card.Title>{article.title}</Card.Title>
-          </Link>
-          <Card.Text></Card.Text>
-        </Card.Body>
-        <Card.Footer>
-          <small className="text-muted">Posted : {article.created_at}</small>
-        </Card.Footer>
-      </Card>
+      <Row xs={1} md={2} className="g-4">
+        {Array.from(articles).map((article) => (
+          <Col key={article.article_id}>
+            <Card>
+              <Card.Img variant="top" src={article.article_img_url} />
+              <Card.Body>
+                <Card.Text>
+                  <small>{article.topic}</small>
+                </Card.Text>
+                <Link to={`/articles/${article.article_id}`}>
+                  <Card.Title>{article.title}</Card.Title>
+                </Link>
+                <Card.Text>By: {article.author}</Card.Text>
+              </Card.Body>
+              <Card.Footer>
+                <small className="text-muted">{article.created_at}</small>
+              </Card.Footer>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     );
-  });
+  }
+
   return (
     <>
       <TopicSelect />
       <SortQueries queryHandler={queryHandler} query={query} />
-      <CardGroup id="card-group">{cards}</CardGroup>
+      <GridExample />
     </>
   );
 }
