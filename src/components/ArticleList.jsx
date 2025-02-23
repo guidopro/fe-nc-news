@@ -53,7 +53,7 @@ export default function ArticleList() {
   function GridExample() {
     return (
       <Row xs={1} md={2} lg={3} className="g-4">
-        {Array.from(articles).map((article) => (
+        {articles.map((article) => (
           <Col key={article.article_id}>
             <Card>
               <Card.Img variant="top" src={article.article_img_url} />

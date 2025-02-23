@@ -81,7 +81,7 @@ export default function NavBar() {
       {avatar && (
         <img
           id="avatar"
-          className="navbar-items"
+          // className="navbar-items"
           src={avatar}
           alt="avatar"
         ></img>

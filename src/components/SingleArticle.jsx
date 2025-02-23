@@ -142,28 +142,38 @@ function Comments({ article_id }) {
     });
   }
 
-  function handleLike(vote) {
+  function handleLike(comment_id, vote) {
     if (isLiked) {
       return;
     }
-    voteOnComment(article_id, vote).catch((err) => {
-      setIsError(err);
-    });
-    setLikes((currentCount) => currentCount + vote);
-    setIsLiked(true);
-    setIsDisLiked(false);
+    voteOnComment(comment_id, vote)
+      .then((res) => {
+        console.log(res);
+
+        setLikes((currentCount) => currentCount + vote);
+        setIsLiked(true);
+        setIsDisLiked(false);
+      })
+      .catch((err) => {
+        setIsError(err);
+      });
   }
 
-  function handleDislike(vote) {
+  function handleDislike(comment_id, vote) {
     if (isDisliked) {
       return;
     }
-    voteOnComment(article_id, vote).catch((err) => {
-      setIsError(err);
-    });
-    setLikes((currentCount) => currentCount + vote);
-    setIsDisLiked(true);
-    setIsLiked(false);
+    voteOnComment(comment_id, vote)
+      .then((res) => {
+        console.log(res);
+
+        setLikes((currentCount) => currentCount + vote);
+        setIsDisLiked(true);
+        setIsLiked(false);
+      })
+      .catch((err) => {
+        setIsError(err);
+      });
   }
 
   const mappedComments = comments.map((comment) => {
@@ -172,14 +182,19 @@ function Comments({ article_id }) {
         key={comment.comment_id}
         style={{ border: "solid 1px black", margin: "1rem", padding: "1rem" }}
       >
-        <p>
-          <div>{comment.author}</div> {comment.created_at}
-        </p>
+        <p>{comment.author}</p>
+        <p>{comment.created_at}</p>
         <p>{comment.body}</p>
-        <button id="like-button" onClick={() => handleLike(1)}>
+        <button
+          id="like-button"
+          onClick={() => handleLike(comment.comment_id, 1)}
+        >
           <img src={thumbsUp} alt="thumbs-up" /> {comment.votes + likes}
         </button>
-        <button id="unlike-button" onClick={() => handleDislike(-1)}>
+        <button
+          id="unlike-button"
+          onClick={() => handleDislike(comment.comment_id, -1)}
+        >
           <img src={thumbsDown} alt="thumbs-down" />
         </button>
         {!isLoading && user === comment.author && (

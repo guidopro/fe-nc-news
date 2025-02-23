@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 
 // styling
 import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 // components
 import Header from "./components/Header";

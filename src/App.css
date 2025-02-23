@@ -64,8 +64,6 @@ h1 {
   height: 50px;
   border-radius: 50%;
   border: solid 1px black;
-  position: absolute;
-  right: 0;
 }
 
 #user-dropdown {
