@@ -12,6 +12,7 @@ import {
 
 import thumbsUp from "../assets/like.png";
 import thumbsDown from "../assets/dislike.png";
+import commentIcon from "../assets/commentIcon.png";
 
 import ArticleNotFound from "./error_handlers/ArticleNotFound";
 import ErrorComponent from "./error_handlers/ErrorComponent";
@@ -95,6 +96,11 @@ export default function SingleArticle() {
         >
           <img src={thumbsDown} />
         </button>
+        <img
+          src={commentIcon}
+          alt=""
+          style={{ height: "auto", width: "auto" }}
+        />
         {isError && <ErrorComponent message={error.message} />}
       </div>
       <Comments article_id={article_id} />
@@ -167,13 +173,13 @@ function Comments({ article_id }) {
         style={{ border: "solid 1px black", margin: "1rem", padding: "1rem" }}
       >
         <p>
-          {comment.author} {comment.created_at}
+          <div>{comment.author}</div> {comment.created_at}
         </p>
         <p>{comment.body}</p>
         <button id="like-button" onClick={() => handleLike(1)}>
           <img src={thumbsUp} alt="thumbs-up" /> {comment.votes + likes}
         </button>
-        <button id="unlike-button" onClick={() => handleDislike(1)}>
+        <button id="unlike-button" onClick={() => handleDislike(-1)}>
           <img src={thumbsDown} alt="thumbs-down" />
         </button>
         {!isLoading && user === comment.author && (

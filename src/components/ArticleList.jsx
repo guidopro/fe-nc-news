@@ -36,7 +36,6 @@ export default function ArticleList() {
     getArticles(topic, query, order)
       .then((articles) => {
         setArticles(articles);
-        setIsLoading(false);
       })
       .catch((err) => {
         setIsError(err);
