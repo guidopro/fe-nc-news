@@ -16,6 +16,7 @@ import commentIcon from "../assets/commentIcon.png";
 
 import ArticleNotFound from "./error_handlers/ArticleNotFound";
 import ErrorComponent from "./error_handlers/ErrorComponent";
+import Loading from "./Loading";
 
 export default function SingleArticle() {
   const { article_id } = useParams();
@@ -42,7 +43,7 @@ export default function SingleArticle() {
   }, []);
 
   if (isLoading) {
-    return <p className="loading">Loading...</p>;
+    return <Loading />;
   } else if (isError) {
     return <ArticleNotFound />;
   }
@@ -146,42 +147,29 @@ function Comments({ article_id }) {
     if (isLiked) {
       return;
     }
-    voteOnComment(comment_id, vote)
-      .then((res) => {
-        console.log(res);
-
-        setLikes((currentCount) => currentCount + vote);
-        setIsLiked(true);
-        setIsDisLiked(false);
-      })
-      .catch((err) => {
-        setIsError(err);
-      });
+    setLikes((currentCount) => currentCount + vote);
+    setIsLiked(true);
+    setIsDisLiked(false);
+    voteOnComment(comment_id, vote).catch((err) => {
+      setIsError(err);
+    });
   }
 
   function handleDislike(comment_id, vote) {
     if (isDisliked) {
       return;
     }
-    voteOnComment(comment_id, vote)
-      .then((res) => {
-        console.log(res);
-
-        setLikes((currentCount) => currentCount + vote);
-        setIsDisLiked(true);
-        setIsLiked(false);
-      })
-      .catch((err) => {
-        setIsError(err);
-      });
+    setLikes((currentCount) => currentCount + vote);
+    setIsDisLiked(true);
+    setIsLiked(false);
+    voteOnComment(comment_id, vote).catch((err) => {
+      setIsError(err);
+    });
   }
 
   const mappedComments = comments.map((comment) => {
     return (
-      <div
-        key={comment.comment_id}
-        style={{ border: "solid 1px black", margin: "1rem", padding: "1rem" }}
-      >
+      <div className="comments" key={comment.comment_id}>
         <p>{comment.author}</p>
         <p>{comment.created_at}</p>
         <p>{comment.body}</p>

@@ -13,6 +13,8 @@ import Row from "react-bootstrap/Row";
 import TopicSelect from "./TopicSelect";
 import SortQueries from "./SortQueries";
 import TopicNotFound from "./error_handlers/TopicNotFound";
+import Loading from "./Loading";
+import { postedAt } from "../utils";
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
@@ -39,7 +41,7 @@ export default function ArticleList() {
   }, [topic, query, order]);
 
   if (isLoading) {
-    return <p className="loading">Loading...</p>;
+    return <Loading />;
   } else if (isError) {
     return <TopicNotFound />;
   }
@@ -67,7 +69,9 @@ export default function ArticleList() {
                 <Card.Text>By: {article.author}</Card.Text>
               </Card.Body>
               <Card.Footer>
-                <small className="text-muted">{article.created_at}</small>
+                <small className="text-muted">
+                  {postedAt(article.created_at)}
+                </small>
               </Card.Footer>
             </Card>
           </Col>

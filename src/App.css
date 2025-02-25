@@ -2,7 +2,7 @@
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: left;
+  text-align: center;
   background-color: rgba(199, 255, 199, 0.371);
 }
 
@@ -13,17 +13,6 @@ h1 {
 
 #select-topic {
   text-align: center;
-}
-
-#card-group {
-  display: block;
-  /* flex-wrap: wrap; */
-  /* background-color: blue; */
-}
-
-.cards {
-  display: inline-flex;
-  margin: 1rem;
 }
 
 .loading {
@@ -107,4 +96,51 @@ h1 {
 
 #article-like-button--clicked {
   color: rgba(0, 0, 255, 0.366);
+}
+
+/* .comments-container {
+  background-color: inherit;
+} */
+
+.comments {
+  /* text-align: center; */
+  background-color: white;
+  border: solid 1px black;
+  margin: 1rem;
+  padding: 1rem;
+}
+
+.bouncer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  width: 100px;
+  height: 100px;
+}
+
+.bouncer div {
+  width: 20px;
+  height: 20px;
+  background: rgba(4, 80, 67, 0.398);
+  border-radius: 50%;
+  animation: bouncer 0.5s cubic-bezier(0.19, 0.57, 0.3, 0.98) infinite alternate;
+}
+
+.bouncer div:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.bouncer div:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.bouncer div:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+@keyframes bouncer {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100px);
+  }
 }
