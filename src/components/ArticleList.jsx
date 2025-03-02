@@ -13,7 +13,7 @@ import Row from "react-bootstrap/Row";
 import TopicSelect from "./TopicSelect";
 import SortQueries from "./SortQueries";
 import TopicNotFound from "./error_handlers/TopicNotFound";
-import Loading from "./Loading";
+import Spinner from "./Loading";
 import { postedAt } from "../utils";
 
 export default function ArticleList() {
@@ -41,7 +41,7 @@ export default function ArticleList() {
   }, [topic, query, order]);
 
   if (isLoading) {
-    return <Loading />;
+    return <Spinner />;
   } else if (isError) {
     return <TopicNotFound />;
   }
