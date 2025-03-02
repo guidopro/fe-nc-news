@@ -12,7 +12,6 @@ import {
 
 import thumbsUp from "../assets/like.png";
 import thumbsDown from "../assets/dislike.png";
-import commentIcon from "../assets/commentIcon.png";
 
 import ArticleNotFound from "./error_handlers/ArticleNotFound";
 import ErrorComponent from "./error_handlers/ErrorComponent";
@@ -97,11 +96,8 @@ export default function SingleArticle() {
         >
           <img src={thumbsDown} />
         </button>
-        <img
-          src={commentIcon}
-          alt=""
-          style={{ height: "auto", width: "auto" }}
-        />
+        <div> {article.comment_count} Comments</div>
+
         {isError && <ErrorComponent message={error.message} />}
       </div>
       <CommentSection article_id={article_id} />
