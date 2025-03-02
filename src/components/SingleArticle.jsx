@@ -16,7 +16,7 @@ import commentIcon from "../assets/commentIcon.png";
 
 import ArticleNotFound from "./error_handlers/ArticleNotFound";
 import ErrorComponent from "./error_handlers/ErrorComponent";
-import Loading from "./Loading";
+import Spinner from "./Loading";
 
 export default function SingleArticle() {
   const { article_id } = useParams();
@@ -24,9 +24,9 @@ export default function SingleArticle() {
   const [article, setArticle] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(null);
-  const [likes, setLikes] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isDisliked, setIsDisLiked] = useState(false);
+  const [articleLikes, setArticleLikes] = useState(0);
+  const [articleIsLiked, setArticleIsLiked] = useState(false);
+  const [articleIsDisliked, setArticleIsDisLiked] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -43,33 +43,33 @@ export default function SingleArticle() {
   }, []);
 
   if (isLoading) {
-    return <Loading />;
+    return <Spinner />;
   } else if (isError) {
     return <ArticleNotFound />;
   }
 
   function handleLike(vote) {
-    if (isLiked) {
+    if (articleIsLiked) {
       return;
     }
     voteOnArticle(article_id, vote).catch((err) => {
       setIsError(err);
     });
-    setLikes((currentCount) => currentCount + vote);
-    setIsLiked(true);
-    setIsDisLiked(false);
+    setArticleLikes((currentCount) => currentCount + vote);
+    setArticleIsLiked(true);
+    setArticleIsDisLiked(false);
   }
 
   function handleDislike(vote) {
-    if (isDisliked) {
+    if (articleIsDisliked) {
       return;
     }
     voteOnArticle(article_id, vote).catch((err) => {
       setIsError(err);
     });
-    setLikes((currentCount) => currentCount + vote);
-    setIsDisLiked(true);
-    setIsLiked(false);
+    setArticleLikes((currentCount) => currentCount + vote);
+    setArticleIsDisLiked(true);
+    setArticleIsLiked(false);
   }
 
   return (
@@ -83,15 +83,21 @@ export default function SingleArticle() {
         </p>
         <p>{article.body}</p>
         <button
-          id={isLiked ? "article-like-button--clicked" : "article-like-button"}
+          id={
+            articleIsLiked
+              ? "article-like-button--clicked"
+              : "article-like-button"
+          }
           onClick={() => handleLike(1)}
         >
           <img src={thumbsUp} style={{ height: "16px", width: "16px" }} />{" "}
-          {article.votes + likes}
+          {article.votes + articleLikes}
         </button>
         <button
           id={
-            isDisliked ? "article-like-button--clicked" : "article-like-button"
+            articleIsDisliked
+              ? "article-like-button--clicked"
+              : "article-like-button"
           }
           onClick={() => handleDislike(-1)}
         >
@@ -104,18 +110,18 @@ export default function SingleArticle() {
         />
         {isError && <ErrorComponent message={error.message} />}
       </div>
-      <Comments article_id={article_id} />
+      <CommentSection article_id={article_id} />
     </>
   );
 }
 
-function Comments({ article_id }) {
+function CommentSection({ article_id }) {
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [deletingButton, setDeletingButton] = useState("");
   const [newPost, setNewPost] = useState(false);
 
-  const [likes, setLikes] = useState(0);
+  // const [likes, setLikes] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isDisliked, setIsDisLiked] = useState(false);
 
@@ -147,7 +153,16 @@ function Comments({ article_id }) {
     if (isLiked) {
       return;
     }
-    setLikes((currentCount) => currentCount + vote);
+    setComments((prevComments) => {
+      console.log(prevComments);
+
+      prevComments.map((comment) => {
+        comment.comment_id === comment_id
+          ? { ...comment, votes: comment.votes + vote }
+          : comment;
+      });
+    });
+    // setLikes((currentCount) => currentCount + vote);
     setIsLiked(true);
     setIsDisLiked(false);
     voteOnComment(comment_id, vote).catch((err) => {
@@ -177,7 +192,7 @@ function Comments({ article_id }) {
           id="like-button"
           onClick={() => handleLike(comment.comment_id, 1)}
         >
-          <img src={thumbsUp} alt="thumbs-up" /> {comment.votes + likes}
+          <img src={thumbsUp} alt="thumbs-up" /> {comment.votes}
         </button>
         <button
           id="unlike-button"
