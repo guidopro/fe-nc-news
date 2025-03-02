@@ -121,10 +121,6 @@ function CommentSection({ article_id }) {
   const [deletingButton, setDeletingButton] = useState("");
   const [newPost, setNewPost] = useState(false);
 
-  // const [likes, setLikes] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isDisliked, setIsDisLiked] = useState(false);
-
   // brings user in from app level for use in comment delete
   const { user } = useContext(UserContext);
 
@@ -150,33 +146,40 @@ function CommentSection({ article_id }) {
   }
 
   function handleLike(comment_id, vote) {
-    if (isLiked) {
-      return;
-    }
-    setComments((prevComments) => {
-      console.log(prevComments);
-
+    setComments((prevComments) =>
       prevComments.map((comment) => {
-        comment.comment_id === comment_id
-          ? { ...comment, votes: comment.votes + vote }
-          : comment;
-      });
-    });
-    // setLikes((currentCount) => currentCount + vote);
-    setIsLiked(true);
-    setIsDisLiked(false);
+        if (comment.comment_id === comment_id && !comment.liked) {
+          // If the comment is not already liked
+          return {
+            ...comment,
+            votes: comment.votes + vote,
+            liked: true,
+            disliked: false,
+          };
+        }
+        return comment;
+      })
+    );
     voteOnComment(comment_id, vote).catch((err) => {
       setIsError(err);
     });
   }
 
   function handleDislike(comment_id, vote) {
-    if (isDisliked) {
-      return;
-    }
-    setLikes((currentCount) => currentCount + vote);
-    setIsDisLiked(true);
-    setIsLiked(false);
+    setComments((prevComments) =>
+      prevComments.map((comment) => {
+        if (comment.comment_id === comment_id && !comment.disliked) {
+          // If the comment is not already disliked
+          return {
+            ...comment,
+            votes: comment.votes + vote,
+            disliked: true,
+            liked: false,
+          };
+        }
+        return comment;
+      })
+    );
     voteOnComment(comment_id, vote).catch((err) => {
       setIsError(err);
     });
