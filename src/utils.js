@@ -2,8 +2,14 @@ export const postedAt = (time) => {
   const date = time.split("T");
   const splitDate = date[0].split("-");
 
+  let monthNumber;
+  if (splitDate[1].startsWith("0")) {
+    monthNumber = Number(splitDate[1][1]);
+  } else {
+    monthNumber = Number(splitDate[1]);
+  }
   let month;
-  switch (Number(splitDate[1][1])) {
+  switch (monthNumber) {
     case 1:
       month = "January";
       break;
@@ -42,10 +48,14 @@ export const postedAt = (time) => {
       break;
   }
 
-  console.log(month);
-
   const arrangedDate = splitDate[2] + " " + month + " " + splitDate[0];
 
   const hourMinutes = date[1].slice(0, -8);
-  return `Posted on ${arrangedDate} ${hourMinutes} GMT`;
+  return `${arrangedDate} ${hourMinutes} GMT`;
+};
+
+export const capitalise = (word) => {
+  const firstLetter = word.charAt(0).toUpperCase();
+  const capitalisedWord = firstLetter + word.slice(1);
+  return capitalisedWord;
 };

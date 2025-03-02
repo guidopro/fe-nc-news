@@ -17,6 +17,7 @@ import commentIcon from "../assets/commentIcon.png";
 import ArticleNotFound from "./error_handlers/ArticleNotFound";
 import ErrorComponent from "./error_handlers/ErrorComponent";
 import Spinner from "./Loading";
+import { postedAt, capitalise } from "../utils";
 
 export default function SingleArticle() {
   const { article_id } = useParams();
@@ -78,28 +79,20 @@ export default function SingleArticle() {
       <div id="single-article-container">
         <img src={article.article_img_url} alt="" />
         <h2>{article.title}</h2>
-        <p>{article.topic}</p>
+        <p>{capitalise(article.topic)}</p>
         <p>
-          Written by {article.author} on {article.created_at}
+          Written by {article.author} on {postedAt(article.created_at)}
         </p>
         <p>{article.body}</p>
         <button
-          // id={
-          //   articleIsLiked
-          //     ? "article-like-button--clicked"
-          //     : "article-like-button"
-          // }
+          className={article.liked ? "like-button--clicked" : "like-button"}
           onClick={() => handleLike(1)}
         >
           <img src={thumbsUp} style={{ height: "16px", width: "16px" }} />{" "}
           {article.votes}
         </button>
         <button
-          // id={
-          //   articleIsDisliked
-          //     ? "article-like-button--clicked"
-          //     : "article-like-button"
-          // }
+          className={article.disliked ? "like-button--clicked" : "like-button"}
           onClick={() => handleDislike(-1)}
         >
           <img src={thumbsDown} />
@@ -190,16 +183,16 @@ function CommentSection({ article_id }) {
     return (
       <div className="comments" key={comment.comment_id}>
         <p>{comment.author}</p>
-        <p>{comment.created_at}</p>
+        <p>{postedAt(comment.created_at)}</p>
         <p>{comment.body}</p>
         <button
-          id="like-button"
+          className={comment.liked ? "like-button--clicked" : "like-button"}
           onClick={() => handleLike(comment.comment_id, 1)}
         >
           <img src={thumbsUp} alt="thumbs-up" /> {comment.votes}
         </button>
         <button
-          id="unlike-button"
+          className={comment.disliked ? "like-button--clicked" : "like-button"}
           onClick={() => handleDislike(comment.comment_id, -1)}
         >
           <img src={thumbsDown} alt="thumbs-down" />

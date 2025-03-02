@@ -90,11 +90,11 @@ h1 {
   cursor: pointer;
 }
 
-#article-like-button {
+.like-button {
   background-color: rgb(255, 255, 255);
 }
 
-#article-like-button--clicked {
+.like-button--clicked {
   color: rgba(0, 0, 255, 0.366);
 }
 

@@ -14,7 +14,7 @@ import TopicSelect from "./TopicSelect";
 import SortQueries from "./SortQueries";
 import TopicNotFound from "./error_handlers/TopicNotFound";
 import Spinner from "./Loading";
-import { postedAt } from "../utils";
+import { postedAt, capitalise } from "../utils";
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
@@ -61,7 +61,7 @@ export default function ArticleList() {
               <Card.Img variant="top" src={article.article_img_url} />
               <Card.Body>
                 <Card.Text>
-                  <small>{article.topic}</small>
+                  <small>{capitalise(article.topic)}</small>
                 </Card.Text>
                 <Link to={`/articles/${article.article_id}`}>
                   <Card.Title>{article.title}</Card.Title>
@@ -70,7 +70,7 @@ export default function ArticleList() {
               </Card.Body>
               <Card.Footer>
                 <small className="text-muted">
-                  {postedAt(article.created_at)}
+                  Posted on {postedAt(article.created_at)}
                 </small>
               </Card.Footer>
             </Card>
