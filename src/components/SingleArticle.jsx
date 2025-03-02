@@ -24,9 +24,6 @@ export default function SingleArticle() {
   const [article, setArticle] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(null);
-  const [articleLikes, setArticleLikes] = useState(0);
-  const [articleIsLiked, setArticleIsLiked] = useState(false);
-  const [articleIsDisliked, setArticleIsDisLiked] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
@@ -49,27 +46,31 @@ export default function SingleArticle() {
   }
 
   function handleLike(vote) {
-    if (articleIsLiked) {
-      return;
+    if (!article.liked) {
+      setArticle({
+        ...article,
+        votes: article.votes + vote,
+        liked: true,
+        disliked: false,
+      });
+      voteOnArticle(article_id, vote).catch((err) => {
+        setIsError(err);
+      });
     }
-    voteOnArticle(article_id, vote).catch((err) => {
-      setIsError(err);
-    });
-    setArticleLikes((currentCount) => currentCount + vote);
-    setArticleIsLiked(true);
-    setArticleIsDisLiked(false);
   }
 
   function handleDislike(vote) {
-    if (articleIsDisliked) {
-      return;
+    if (!article.disliked) {
+      setArticle({
+        ...article,
+        votes: article.votes + vote,
+        liked: false,
+        disliked: true,
+      });
+      voteOnArticle(article_id, vote).catch((err) => {
+        setIsError(err);
+      });
     }
-    voteOnArticle(article_id, vote).catch((err) => {
-      setIsError(err);
-    });
-    setArticleLikes((currentCount) => currentCount + vote);
-    setArticleIsDisLiked(true);
-    setArticleIsLiked(false);
   }
 
   return (
@@ -83,22 +84,22 @@ export default function SingleArticle() {
         </p>
         <p>{article.body}</p>
         <button
-          id={
-            articleIsLiked
-              ? "article-like-button--clicked"
-              : "article-like-button"
-          }
+          // id={
+          //   articleIsLiked
+          //     ? "article-like-button--clicked"
+          //     : "article-like-button"
+          // }
           onClick={() => handleLike(1)}
         >
           <img src={thumbsUp} style={{ height: "16px", width: "16px" }} />{" "}
-          {article.votes + articleLikes}
+          {article.votes}
         </button>
         <button
-          id={
-            articleIsDisliked
-              ? "article-like-button--clicked"
-              : "article-like-button"
-          }
+          // id={
+          //   articleIsDisliked
+          //     ? "article-like-button--clicked"
+          //     : "article-like-button"
+          // }
           onClick={() => handleDislike(-1)}
         >
           <img src={thumbsDown} />
@@ -128,7 +129,7 @@ function CommentSection({ article_id }) {
     getComments(article_id).then((comments) => {
       setComments(comments);
     });
-  }, [deletingButton, user, newPost]);
+  }, [user, newPost]);
 
   function handleDelete(e) {
     setIsLoading(true);
