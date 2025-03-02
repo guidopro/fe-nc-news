@@ -1,7 +1,7 @@
 export default function ErrorComponent({ message }) {
   return (
-    <div>
-      <h1>Error</h1>
+    <div className="error">
+      <h4>Error</h4>
       <p>{message}</p>
     </div>
   );

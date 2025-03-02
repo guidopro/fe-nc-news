@@ -78,7 +78,9 @@ export default function SingleArticle() {
       <div id="single-article-container">
         <img src={article.article_img_url} alt="" />
         <h2>{article.title}</h2>
-        <p>{capitalise(article.topic)}</p>
+        <p style={{ textDecoration: "underline" }}>
+          {capitalise(article.topic)}
+        </p>
         <p>
           Written by {article.author} on {postedAt(article.created_at)}
         </p>
@@ -96,7 +98,9 @@ export default function SingleArticle() {
         >
           <img src={thumbsDown} />
         </button>
-        <div> {article.comment_count} Comments</div>
+        <div style={{ textAlign: "right" }}>
+          {article.comment_count} Comments
+        </div>
 
         {isError && <ErrorComponent message={error.message} />}
       </div>
@@ -227,7 +231,7 @@ function PostComment({ article_id, setComments, newPost, setNewPost }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(null);
 
-  useState(() => {
+  useEffect(() => {
     setIsError(null);
   }, [user]);
 
