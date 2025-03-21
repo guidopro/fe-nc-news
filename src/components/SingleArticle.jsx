@@ -82,7 +82,10 @@ export default function SingleArticle() {
           {capitalise(article.topic)}
         </p>
         <p>
-          Written by {article.author} on {postedAt(article.created_at)}
+          <i>
+            {" "}
+            Written by {article.author} on {postedAt(article.created_at)}
+          </i>
         </p>
         <p>{article.body}</p>
         <button
@@ -99,7 +102,9 @@ export default function SingleArticle() {
           <img src={thumbsDown} />
         </button>
         <div style={{ textAlign: "right" }}>
-          {article.comment_count} Comments
+          {article.comment_count === "1"
+            ? "1 Comment"
+            : `${article.comment_count} Comments`}
         </div>
 
         {isError && <ErrorComponent message={error.message} />}

@@ -15,6 +15,7 @@ import SortQueries from "./SortQueries";
 import TopicNotFound from "./error_handlers/TopicNotFound";
 import Spinner from "./Loading";
 import { postedAt, capitalise } from "../utils";
+import NextBackButtons from "./NextBackButtons";
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
@@ -22,15 +23,17 @@ export default function ArticleList() {
   const [isError, setIsError] = useState(null);
   const [query, setQuery] = useState("created_at");
   const [order, setOrder] = useState("desc");
-
-  const params = useParams();
-  const topic = params.topic;
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const [topic, setTopic] = useState("");
 
   useEffect(() => {
     setIsLoading(true);
-    getArticles(topic, query, order)
-      .then((articles) => {
+    getArticles(topic, query, order, page)
+      .then(({ articles, total_count }) => {
         setArticles(articles);
+        setTotalCount(total_count);
       })
       .catch((err) => {
         setIsError(err);
@@ -38,7 +41,7 @@ export default function ArticleList() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [topic, query, order]);
+  }, [topic, query, order, page]);
 
   if (isLoading) {
     return <Spinner />;
@@ -47,6 +50,7 @@ export default function ArticleList() {
   }
 
   function queryHandler(e) {
+    page !== 1 && setPage(1);
     const splitQueries = e.target.value.split(" ");
     setQuery(splitQueries[0]);
     setOrder(splitQueries[1]);
@@ -58,7 +62,9 @@ export default function ArticleList() {
         {articles.map((article) => (
           <Col key={article.article_id}>
             <Card>
-              <Card.Img variant="top" src={article.article_img_url} />
+              <Link to={`/articles/${article.article_id}`}>
+                <Card.Img variant="top" src={article.article_img_url} />
+              </Link>
               <Card.Body>
                 <Card.Text>
                   <small>{capitalise(article.topic)}</small>
@@ -67,6 +73,12 @@ export default function ArticleList() {
                   <Card.Title>{article.title}</Card.Title>
                 </Link>
                 <Card.Text>By: {article.author}</Card.Text>
+                <Card.Text
+                  style={{ display: "flex", justifyContent: "space-evenly" }}
+                >
+                  <p>Likes: {article.votes}</p>{" "}
+                  <p>Comments: {article.comment_count}</p>
+                </Card.Text>
               </Card.Body>
               <Card.Footer>
                 <small className="text-muted">
@@ -82,8 +94,14 @@ export default function ArticleList() {
 
   return (
     <>
-      <TopicSelect />
+      <TopicSelect page={page} setPage={setPage} setTopic={setTopic} />
       <SortQueries queryHandler={queryHandler} query={query} order={order} />
+      <NextBackButtons
+        page={page}
+        setPage={setPage}
+        totalCount={totalCount}
+        limit={limit}
+      />
       <GridExample />
     </>
   );
