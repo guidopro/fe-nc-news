@@ -49,7 +49,7 @@ export default function NavBar() {
 
   return (
     <nav id="navbar">
-      <Link className="navbar-items" to="/">
+      <Link className="navbar-items" to="/" reloadDocument>
         Home
       </Link>
       |
